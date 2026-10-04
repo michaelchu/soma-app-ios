@@ -10,7 +10,6 @@ struct SettingsView: View {
     var isFirstRun: Bool = false
     var onDone: (() -> Void)? = nil
 
-    @State private var baseURL: String = SomaAPIClient.shared.baseURLString
     @State private var token: String = KeychainHelper.loadToken() ?? ""
     @State private var showToken = false
     @State private var savedMessage: String?
@@ -30,10 +29,9 @@ struct SettingsView: View {
                 }
 
                 Section("Soma API") {
-                    TextField("https://your-app.vercel.app", text: $baseURL)
-                        .keyboardType(.URL)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
+                    Text("Connected to use-soma.vercel.app")
+                        .font(SomaFont.regular(13))
+                        .foregroundColor(SomaTheme.muted)
                     HStack {
                         if showToken {
                             TextField("API token", text: $token)
@@ -66,15 +64,26 @@ struct SettingsView: View {
                         Text(hkStatus)
                             .foregroundColor(SomaTheme.muted)
                     }
-                    Button("Connect Apple Health") {
-                        Task {
-                            do {
-                                try await HealthKitManager.shared.requestAuthorization()
-                                hkStatus = "Connected"
-                            } catch {
-                                hkStatus = "Denied"
+                    if hkStatus != "Connected" {
+                        Button("Connect Apple Health") {
+                            Task {
+                                do {
+                                    try await HealthKitManager.shared.requestAuthorization()
+                                    hkStatus = "Connected"
+                                } catch {
+                                    hkStatus = "Denied"
+                                }
                             }
                         }
+                    } else {
+                        // iOS doesn't let apps revoke HealthKit access themselves;
+                        // the user does it in Settings.
+                        Button("Manage Health permissions in Settings") {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                        .foregroundColor(SomaTheme.muted)
                     }
                     Button("Import new Health readings into Soma") {
                         Task {
@@ -118,7 +127,7 @@ struct SettingsView: View {
                             saveAPIConfig()
                             onDone?()
                         }
-                        .disabled(baseURL.trimmingCharacters(in: .whitespaces).isEmpty || token.isEmpty)
+                        .disabled(token.isEmpty)
                     } else {
                         Button("Done") { dismiss() }
                     }
@@ -137,10 +146,6 @@ struct SettingsView: View {
     }
 
     private func saveAPIConfig() {
-        let clean = baseURL.trimmingCharacters(in: .whitespacesAndNewlines)
-            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        SomaAPIClient.shared.baseURLString = clean
-        baseURL = clean
         _ = KeychainHelper.saveToken(token.trimmingCharacters(in: .whitespacesAndNewlines))
         Task {
             await store.load()

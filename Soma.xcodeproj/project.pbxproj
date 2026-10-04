@@ -5,126 +5,471 @@
 	};
 	objectVersion = 56;
 	objects = {
-		EFDE8D9F37C1737731473D02 = {isa = PBXBuildFile; fileRef = D242B681F357DEE968C2CF25; };
-		F8CCFDC9C24DB03FC672A60F = {isa = PBXBuildFile; fileRef = FB826E0AA431D5BDC0EEAB75; };
-		AB4F8384A32D6ED2F7761E35 = {isa = PBXBuildFile; fileRef = 089CF77D6C6AD687F2EBFDE3; };
-		CD3710CA3A9FD7D45C24BD6C = {isa = PBXBuildFile; fileRef = 42D29B2D8EAB46F1C9658800; };
-		B878BB837B2A96BF10CCED94 = {isa = PBXBuildFile; fileRef = 677746DA7CA62CAA544A9A45; };
-		870CC46AB5C9414CB48DB662 = {isa = PBXBuildFile; fileRef = EC24AB81584BB5A76737325C; };
-		C34373EBAC31AAD72AD49350 = {isa = PBXBuildFile; fileRef = 526D0F56B3E1A84BC99762CE; };
-		9FC93C8199966C973A7AD67A = {isa = PBXBuildFile; fileRef = 6EDBE7B1CB3EBCDFE08BF23D; };
-		DE5E9EBD0F522F21A4B15C60 = {isa = PBXBuildFile; fileRef = 2168D93B8CB518016DD0128F; };
-		4CEEDC11698EB82F5D746617 = {isa = PBXBuildFile; fileRef = ABAA2C9F51F9B3B369096A39; };
-		94FC738582F39828F783E9EE = {isa = PBXBuildFile; fileRef = AA2C263208145D0776D049E6; };
-		0C251BAFEA0DFD1CDA474EB1 = {isa = PBXBuildFile; fileRef = 765E4876EB2F95EF0E82F6EA; };
-		21EF11DDBC0A3BE1B9E60D84 = {isa = PBXBuildFile; fileRef = 55797D9290A4AAF6D715573E; };
-		19FBDE73A7E6FA72BCF60AE5 = {isa = PBXBuildFile; fileRef = 1B24899CB69992BD6DD40380; };
-		AEEF813FDE13AA172EEB5202 = {isa = PBXBuildFile; fileRef = B774E5F8D6F2B4EB1ECF91E7; };
-		3A9D615882EBC043EAD9F747 = {isa = PBXBuildFile; fileRef = 0F975D0B369EF20612795C48; };
-		8BBC3E89585DFC1D07916F7B = {isa = PBXBuildFile; fileRef = D0A62551F2855E7A6E80CDB7; };
-		536DF9A71AC1DBAF6FD3D9B9 = {isa = PBXBuildFile; fileRef = 5765DCBD6DBE6283470AC792; };
-		0561B6B779527A2FA058B6AB = {isa = PBXBuildFile; fileRef = 0C299F368686D7C3AF7EE31B; };
-		0D0F0622355761369C7461F5 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info.plist"; path = "Info.plist"; sourceTree = "<group>"; };
-		9CD8132A9BF0387C6AD9D147 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Soma.entitlements"; path = "Soma.entitlements"; sourceTree = "<group>"; };
-		D242B681F357DEE968C2CF25 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SomaApp.swift"; path = "SomaApp.swift"; sourceTree = "<group>"; };
-		FB826E0AA431D5BDC0EEAB75 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "KeychainHelper.swift"; path = "KeychainHelper.swift"; sourceTree = "<group>"; };
-		089CF77D6C6AD687F2EBFDE3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SomaAPIClient.swift"; path = "SomaAPIClient.swift"; sourceTree = "<group>"; };
-		42D29B2D8EAB46F1C9658800 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HealthKitManager.swift"; path = "HealthKitManager.swift"; sourceTree = "<group>"; };
-		677746DA7CA62CAA544A9A45 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "BPModels.swift"; path = "BPModels.swift"; sourceTree = "<group>"; };
-		EC24AB81584BB5A76737325C = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ReminderManager.swift"; path = "ReminderManager.swift"; sourceTree = "<group>"; };
-		0C299F368686D7C3AF7EE31B = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Assets.xcassets"; path = "Assets.xcassets"; sourceTree = "<group>"; };
-		D0A62551F2855E7A6E80CDB7 = {isa = PBXFileReference; lastKnownFileType = file; name = "LINESeedJP-Bold.ttf"; path = "LINESeedJP-Bold.ttf"; sourceTree = "<group>"; };
-		5765DCBD6DBE6283470AC792 = {isa = PBXFileReference; lastKnownFileType = file; name = "LINESeedJP-Regular.ttf"; path = "LINESeedJP-Regular.ttf"; sourceTree = "<group>"; };
-		526D0F56B3E1A84BC99762CE = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "BPStore.swift"; path = "BPStore.swift"; sourceTree = "<group>"; };
-		6EDBE7B1CB3EBCDFE08BF23D = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterState.swift"; path = "FilterState.swift"; sourceTree = "<group>"; };
-		2168D93B8CB518016DD0128F = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SomaTheme.swift"; path = "SomaTheme.swift"; sourceTree = "<group>"; };
-		ABAA2C9F51F9B3B369096A39 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ChartsView.swift"; path = "ChartsView.swift"; sourceTree = "<group>"; };
-		AA2C263208145D0776D049E6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ContentView.swift"; path = "ContentView.swift"; sourceTree = "<group>"; };
-		765E4876EB2F95EF0E82F6EA = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "QuickLogSheet.swift"; path = "QuickLogSheet.swift"; sourceTree = "<group>"; };
-		55797D9290A4AAF6D715573E = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ReadingsView.swift"; path = "ReadingsView.swift"; sourceTree = "<group>"; };
-		1B24899CB69992BD6DD40380 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingsView.swift"; path = "SettingsView.swift"; sourceTree = "<group>"; };
-		B774E5F8D6F2B4EB1ECF91E7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StatisticsView.swift"; path = "StatisticsView.swift"; sourceTree = "<group>"; };
-		0F975D0B369EF20612795C48 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TodayView.swift"; path = "TodayView.swift"; sourceTree = "<group>"; };
-		7C56E3DC6B88E973BC2CAAF2 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soma.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BDDBABAA3CE971020601F35F = {isa = PBXGroup; children = (0D0F0622355761369C7461F5, 9CD8132A9BF0387C6AD9D147, D242B681F357DEE968C2CF25, AFA5B06B2477EF44A19CA5F0, A2DB932AA962DE3F2366853A, A2A9809DAF0AEE6960B34B37, 519597EC0CF627D633694ABD, 369366657F0CC118760331FE, AEDD2D27F0EE3642B5B2B0EB, ECEBC441ECDD3289251F91F9, 6C923F6D92369A43B16924F4); name = "Soma"; path = "Soma"; sourceTree = "<group>"; };
-		AFA5B06B2477EF44A19CA5F0 = {isa = PBXGroup; children = (FB826E0AA431D5BDC0EEAB75, 089CF77D6C6AD687F2EBFDE3); name = "API"; path = "API"; sourceTree = "<group>"; };
-		A2DB932AA962DE3F2366853A = {isa = PBXGroup; children = (42D29B2D8EAB46F1C9658800); name = "HealthKit"; path = "HealthKit"; sourceTree = "<group>"; };
-		A2A9809DAF0AEE6960B34B37 = {isa = PBXGroup; children = (677746DA7CA62CAA544A9A45); name = "Models"; path = "Models"; sourceTree = "<group>"; };
-		519597EC0CF627D633694ABD = {isa = PBXGroup; children = (EC24AB81584BB5A76737325C); name = "Notifications"; path = "Notifications"; sourceTree = "<group>"; };
-		369366657F0CC118760331FE = {isa = PBXGroup; children = (0C299F368686D7C3AF7EE31B, 7DB0A6B8C86122DEC6D06478); name = "Resources"; path = "Resources"; sourceTree = "<group>"; };
-		7DB0A6B8C86122DEC6D06478 = {isa = PBXGroup; children = (D0A62551F2855E7A6E80CDB7, 5765DCBD6DBE6283470AC792); name = "Fonts"; path = "Fonts"; sourceTree = "<group>"; };
-		AEDD2D27F0EE3642B5B2B0EB = {isa = PBXGroup; children = (526D0F56B3E1A84BC99762CE, 6EDBE7B1CB3EBCDFE08BF23D); name = "State"; path = "State"; sourceTree = "<group>"; };
-		ECEBC441ECDD3289251F91F9 = {isa = PBXGroup; children = (2168D93B8CB518016DD0128F); name = "Theme"; path = "Theme"; sourceTree = "<group>"; };
-		6C923F6D92369A43B16924F4 = {isa = PBXGroup; children = (ABAA2C9F51F9B3B369096A39, AA2C263208145D0776D049E6, 765E4876EB2F95EF0E82F6EA, 55797D9290A4AAF6D715573E, 1B24899CB69992BD6DD40380, B774E5F8D6F2B4EB1ECF91E7, 0F975D0B369EF20612795C48); name = "Views"; path = "Views"; sourceTree = "<group>"; };
-		AA0596BBDB4DCC95D5D4F10C = {isa = PBXGroup; children = (BDDBABAA3CE971020601F35F, 7C56E3DC6B88E973BC2CAAF2); sourceTree = "<group>"; };
-		9261F04E014268C1FB6C1C5E = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
-			EFDE8D9F37C1737731473D02,
-			F8CCFDC9C24DB03FC672A60F,
-			AB4F8384A32D6ED2F7761E35,
-			CD3710CA3A9FD7D45C24BD6C,
-			B878BB837B2A96BF10CCED94,
-			870CC46AB5C9414CB48DB662,
-			C34373EBAC31AAD72AD49350,
-			9FC93C8199966C973A7AD67A,
-			DE5E9EBD0F522F21A4B15C60,
-			4CEEDC11698EB82F5D746617,
-			94FC738582F39828F783E9EE,
-			0C251BAFEA0DFD1CDA474EB1,
-			21EF11DDBC0A3BE1B9E60D84,
-			19FBDE73A7E6FA72BCF60AE5,
-			AEEF813FDE13AA172EEB5202,
-			3A9D615882EBC043EAD9F747,
-		); runOnlyForDeploymentPostprocessing = 0; };
-		B04831CC372489EBF0287850 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
-			8BBC3E89585DFC1D07916F7B,
-			536DF9A71AC1DBAF6FD3D9B9,
-			0561B6B779527A2FA058B6AB,
-		); runOnlyForDeploymentPostprocessing = 0; };
-		0B0EAC1C67A2F2EB9E6EB6F7 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		34A04005BCAF206EEC990BD9 = {isa = PBXNativeTarget; buildConfigurationList = EA761691A51ACBE657F2A897; buildPhases = (9261F04E014268C1FB6C1C5E, 0B0EAC1C67A2F2EB9E6EB6F7, B04831CC372489EBF0287850); buildRules = (); dependencies = (); name = Soma; productName = Soma; productReference = 7C56E3DC6B88E973BC2CAAF2; productType = "com.apple.product-type.application"; };
-		244210E48437B6556980A702 = {isa = PBXProject; attributes = { LastUpgradeCheck = 1600; TargetAttributes = { 34A04005BCAF206EEC990BD9 = { CreatedOnToolsVersion = 16.0; }; }; }; buildConfigurationList = 88651694C9EF2D25BD8E75A6; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en); mainGroup = AA0596BBDB4DCC95D5D4F10C; productRefGroup = AA0596BBDB4DCC95D5D4F10C; projectDirPath = ""; projectRoot = ""; targets = (34A04005BCAF206EEC990BD9); };
-		B639011BA1407F1522A7B80A = {isa = XCBuildConfiguration; buildSettings = {
-			ALWAYS_SEARCH_USER_PATHS = NO;
-			CLANG_ENABLE_MODULES = YES;
-		}; name = project-Debug; };
-		C7667BDF3E2D07ACE9A9875D = {isa = XCBuildConfiguration; buildSettings = {
-			ALWAYS_SEARCH_USER_PATHS = NO;
-			CLANG_ENABLE_MODULES = YES;
-		}; name = project-Release; };
-		62109CD13419DC10661BC656 = {isa = XCBuildConfiguration; buildSettings = {
-			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-			CODE_SIGN_ENTITLEMENTS = "Soma/Soma.entitlements";
-			CODE_SIGN_STYLE = Automatic;
-			CURRENT_PROJECT_VERSION = 1;
-			GENERATE_INFOPLIST_FILE = NO;
-			INFOPLIST_FILE = "Soma/Info.plist";
-			IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-			MARKETING_VERSION = 1.0;
-			PRODUCT_BUNDLE_IDENTIFIER = "com.michaelchu.soma";
-			PRODUCT_NAME = "$(TARGET_NAME)";
-			SWIFT_EMIT_LOC_STRINGS = YES;
-			SWIFT_VERSION = 5.0;
-			TARGETED_DEVICE_FAMILY = "1";
-			SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-		}; name = target-Debug; };
-		69E8A466A45A1D46824C4711 = {isa = XCBuildConfiguration; buildSettings = {
-			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-			CODE_SIGN_ENTITLEMENTS = "Soma/Soma.entitlements";
-			CODE_SIGN_STYLE = Automatic;
-			CURRENT_PROJECT_VERSION = 1;
-			GENERATE_INFOPLIST_FILE = NO;
-			INFOPLIST_FILE = "Soma/Info.plist";
-			IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-			MARKETING_VERSION = 1.0;
-			PRODUCT_BUNDLE_IDENTIFIER = "com.michaelchu.soma";
-			PRODUCT_NAME = "$(TARGET_NAME)";
-			SWIFT_EMIT_LOC_STRINGS = YES;
-			SWIFT_VERSION = 5.0;
-			TARGETED_DEVICE_FAMILY = "1";
-		}; name = target-Release; };
-		88651694C9EF2D25BD8E75A6 = {isa = XCConfigurationList; buildConfigurations = (B639011BA1407F1522A7B80A, C7667BDF3E2D07ACE9A9875D); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		EA761691A51ACBE657F2A897 = {isa = XCConfigurationList; buildConfigurations = (62109CD13419DC10661BC656, 69E8A466A45A1D46824C4711); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+
+/* Begin PBXBuildFile section */
+		0561B6B779527A2FA058B6AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C299F368686D7C3AF7EE31B /* Assets.xcassets */; };
+		0C251BAFEA0DFD1CDA474EB1 /* QuickLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765E4876EB2F95EF0E82F6EA /* QuickLogSheet.swift */; };
+		19FBDE73A7E6FA72BCF60AE5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B24899CB69992BD6DD40380 /* SettingsView.swift */; };
+		21EF11DDBC0A3BE1B9E60D84 /* ReadingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55797D9290A4AAF6D715573E /* ReadingsView.swift */; };
+		3A9D615882EBC043EAD9F747 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F975D0B369EF20612795C48 /* TodayView.swift */; };
+		4CEEDC11698EB82F5D746617 /* ChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAA2C9F51F9B3B369096A39 /* ChartsView.swift */; };
+		536DF9A71AC1DBAF6FD3D9B9 /* LINESeedJP-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5765DCBD6DBE6283470AC792 /* LINESeedJP-Regular.ttf */; };
+		7AD8DD9450C1D7A4F969CE7F /* SomaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8735705AF92B5E974BBF52D /* SomaTests.swift */; };
+		870CC46AB5C9414CB48DB662 /* ReminderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC24AB81584BB5A76737325C /* ReminderManager.swift */; };
+		8BBC3E89585DFC1D07916F7B /* LINESeedJP-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0A62551F2855E7A6E80CDB7 /* LINESeedJP-Bold.ttf */; };
+		94FC738582F39828F783E9EE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2C263208145D0776D049E6 /* ContentView.swift */; };
+		9FC93C8199966C973A7AD67A /* FilterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDBE7B1CB3EBCDFE08BF23D /* FilterState.swift */; };
+		AB4F8384A32D6ED2F7761E35 /* SomaAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089CF77D6C6AD687F2EBFDE3 /* SomaAPIClient.swift */; };
+		AEEF813FDE13AA172EEB5202 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B774E5F8D6F2B4EB1ECF91E7 /* StatisticsView.swift */; };
+		B878BB837B2A96BF10CCED94 /* BPModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677746DA7CA62CAA544A9A45 /* BPModels.swift */; };
+		C34373EBAC31AAD72AD49350 /* BPStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526D0F56B3E1A84BC99762CE /* BPStore.swift */; };
+		CD3710CA3A9FD7D45C24BD6C /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D29B2D8EAB46F1C9658800 /* HealthKitManager.swift */; };
+		DE5E9EBD0F522F21A4B15C60 /* SomaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168D93B8CB518016DD0128F /* SomaTheme.swift */; };
+		EFDE8D9F37C1737731473D02 /* SomaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D242B681F357DEE968C2CF25 /* SomaApp.swift */; };
+		F8CCFDC9C24DB03FC672A60F /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB826E0AA431D5BDC0EEAB75 /* KeychainHelper.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		25A640B699F944DC77F1F1FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244210E48437B6556980A702 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 34A04005BCAF206EEC990BD9;
+			remoteInfo = Soma;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		089CF77D6C6AD687F2EBFDE3 /* SomaAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomaAPIClient.swift; sourceTree = "<group>"; };
+		0C299F368686D7C3AF7EE31B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0D0F0622355761369C7461F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0F975D0B369EF20612795C48 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		1B24899CB69992BD6DD40380 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2168D93B8CB518016DD0128F /* SomaTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomaTheme.swift; sourceTree = "<group>"; };
+		42D29B2D8EAB46F1C9658800 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		526D0F56B3E1A84BC99762CE /* BPStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BPStore.swift; sourceTree = "<group>"; };
+		55797D9290A4AAF6D715573E /* ReadingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingsView.swift; sourceTree = "<group>"; };
+		5765DCBD6DBE6283470AC792 /* LINESeedJP-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LINESeedJP-Regular.ttf"; sourceTree = "<group>"; };
+		677746DA7CA62CAA544A9A45 /* BPModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BPModels.swift; sourceTree = "<group>"; };
+		6EDBE7B1CB3EBCDFE08BF23D /* FilterState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterState.swift; sourceTree = "<group>"; };
+		765E4876EB2F95EF0E82F6EA /* QuickLogSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogSheet.swift; sourceTree = "<group>"; };
+		7C56E3DC6B88E973BC2CAAF2 /* Soma.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soma.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CD8132A9BF0387C6AD9D147 /* Soma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Soma.entitlements; sourceTree = "<group>"; };
+		AA2C263208145D0776D049E6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		ABAA2C9F51F9B3B369096A39 /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
+		B774E5F8D6F2B4EB1ECF91E7 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		C8734333DAB6488220EFA310 /* SomaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SomaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8735705AF92B5E974BBF52D /* SomaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomaTests.swift; sourceTree = "<group>"; };
+		D0A62551F2855E7A6E80CDB7 /* LINESeedJP-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LINESeedJP-Bold.ttf"; sourceTree = "<group>"; };
+		D242B681F357DEE968C2CF25 /* SomaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomaApp.swift; sourceTree = "<group>"; };
+		EC24AB81584BB5A76737325C /* ReminderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderManager.swift; sourceTree = "<group>"; };
+		FB826E0AA431D5BDC0EEAB75 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0B0EAC1C67A2F2EB9E6EB6F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2AF2C5B1FFACDBC3E3E3ED7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0ED4925424A501EB270F3777 /* SomaTests */ = {
+			isa = PBXGroup;
+			children = (
+				C8735705AF92B5E974BBF52D /* SomaTests.swift */,
+			);
+			path = SomaTests;
+			sourceTree = "<group>";
+		};
+		369366657F0CC118760331FE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0C299F368686D7C3AF7EE31B /* Assets.xcassets */,
+				7DB0A6B8C86122DEC6D06478 /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		519597EC0CF627D633694ABD /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				EC24AB81584BB5A76737325C /* ReminderManager.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		6C923F6D92369A43B16924F4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				ABAA2C9F51F9B3B369096A39 /* ChartsView.swift */,
+				AA2C263208145D0776D049E6 /* ContentView.swift */,
+				765E4876EB2F95EF0E82F6EA /* QuickLogSheet.swift */,
+				55797D9290A4AAF6D715573E /* ReadingsView.swift */,
+				1B24899CB69992BD6DD40380 /* SettingsView.swift */,
+				B774E5F8D6F2B4EB1ECF91E7 /* StatisticsView.swift */,
+				0F975D0B369EF20612795C48 /* TodayView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7DB0A6B8C86122DEC6D06478 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D0A62551F2855E7A6E80CDB7 /* LINESeedJP-Bold.ttf */,
+				5765DCBD6DBE6283470AC792 /* LINESeedJP-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		A2A9809DAF0AEE6960B34B37 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				677746DA7CA62CAA544A9A45 /* BPModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A2DB932AA962DE3F2366853A /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				42D29B2D8EAB46F1C9658800 /* HealthKitManager.swift */,
+			);
+			path = HealthKit;
+			sourceTree = "<group>";
+		};
+		AA0596BBDB4DCC95D5D4F10C = {
+			isa = PBXGroup;
+			children = (
+				BDDBABAA3CE971020601F35F /* Soma */,
+				0ED4925424A501EB270F3777 /* SomaTests */,
+				7C56E3DC6B88E973BC2CAAF2 /* Soma.app */,
+				C8734333DAB6488220EFA310 /* SomaTests.xctest */,
+			);
+			sourceTree = "<group>";
+		};
+		AEDD2D27F0EE3642B5B2B0EB /* State */ = {
+			isa = PBXGroup;
+			children = (
+				526D0F56B3E1A84BC99762CE /* BPStore.swift */,
+				6EDBE7B1CB3EBCDFE08BF23D /* FilterState.swift */,
+			);
+			path = State;
+			sourceTree = "<group>";
+		};
+		AFA5B06B2477EF44A19CA5F0 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				FB826E0AA431D5BDC0EEAB75 /* KeychainHelper.swift */,
+				089CF77D6C6AD687F2EBFDE3 /* SomaAPIClient.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		BDDBABAA3CE971020601F35F /* Soma */ = {
+			isa = PBXGroup;
+			children = (
+				0D0F0622355761369C7461F5 /* Info.plist */,
+				9CD8132A9BF0387C6AD9D147 /* Soma.entitlements */,
+				D242B681F357DEE968C2CF25 /* SomaApp.swift */,
+				AFA5B06B2477EF44A19CA5F0 /* API */,
+				A2DB932AA962DE3F2366853A /* HealthKit */,
+				A2A9809DAF0AEE6960B34B37 /* Models */,
+				519597EC0CF627D633694ABD /* Notifications */,
+				369366657F0CC118760331FE /* Resources */,
+				AEDD2D27F0EE3642B5B2B0EB /* State */,
+				ECEBC441ECDD3289251F91F9 /* Theme */,
+				6C923F6D92369A43B16924F4 /* Views */,
+			);
+			path = Soma;
+			sourceTree = "<group>";
+		};
+		ECEBC441ECDD3289251F91F9 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				2168D93B8CB518016DD0128F /* SomaTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34A04005BCAF206EEC990BD9 /* Soma */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA761691A51ACBE657F2A897 /* Build configuration list for PBXNativeTarget "Soma" */;
+			buildPhases = (
+				9261F04E014268C1FB6C1C5E /* Sources */,
+				0B0EAC1C67A2F2EB9E6EB6F7 /* Frameworks */,
+				B04831CC372489EBF0287850 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Soma;
+			productName = Soma;
+			productReference = 7C56E3DC6B88E973BC2CAAF2 /* Soma.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B70E7FC58E5219C3FB7E302C /* SomaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2F4094E401716CD67239F709 /* Build configuration list for PBXNativeTarget "SomaTests" */;
+			buildPhases = (
+				69CE4554583B2F0DF741A57B /* Sources */,
+				A2AF2C5B1FFACDBC3E3E3ED7 /* Frameworks */,
+				773CDE3DA6BAE5AD7622B3AA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				909756BA9A4D862B737042B6 /* PBXTargetDependency */,
+			);
+			name = SomaTests;
+			productName = SomaTests;
+			productReference = C8734333DAB6488220EFA310 /* SomaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		244210E48437B6556980A702 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					34A04005BCAF206EEC990BD9 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					B70E7FC58E5219C3FB7E302C = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 34A04005BCAF206EEC990BD9;
+					};
+				};
+			};
+			buildConfigurationList = 88651694C9EF2D25BD8E75A6 /* Build configuration list for PBXProject "Soma" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AA0596BBDB4DCC95D5D4F10C;
+			productRefGroup = AA0596BBDB4DCC95D5D4F10C;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34A04005BCAF206EEC990BD9 /* Soma */,
+				B70E7FC58E5219C3FB7E302C /* SomaTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		773CDE3DA6BAE5AD7622B3AA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B04831CC372489EBF0287850 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BBC3E89585DFC1D07916F7B /* LINESeedJP-Bold.ttf in Resources */,
+				536DF9A71AC1DBAF6FD3D9B9 /* LINESeedJP-Regular.ttf in Resources */,
+				0561B6B779527A2FA058B6AB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		69CE4554583B2F0DF741A57B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AD8DD9450C1D7A4F969CE7F /* SomaTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9261F04E014268C1FB6C1C5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFDE8D9F37C1737731473D02 /* SomaApp.swift in Sources */,
+				F8CCFDC9C24DB03FC672A60F /* KeychainHelper.swift in Sources */,
+				AB4F8384A32D6ED2F7761E35 /* SomaAPIClient.swift in Sources */,
+				CD3710CA3A9FD7D45C24BD6C /* HealthKitManager.swift in Sources */,
+				B878BB837B2A96BF10CCED94 /* BPModels.swift in Sources */,
+				870CC46AB5C9414CB48DB662 /* ReminderManager.swift in Sources */,
+				C34373EBAC31AAD72AD49350 /* BPStore.swift in Sources */,
+				9FC93C8199966C973A7AD67A /* FilterState.swift in Sources */,
+				DE5E9EBD0F522F21A4B15C60 /* SomaTheme.swift in Sources */,
+				4CEEDC11698EB82F5D746617 /* ChartsView.swift in Sources */,
+				94FC738582F39828F783E9EE /* ContentView.swift in Sources */,
+				0C251BAFEA0DFD1CDA474EB1 /* QuickLogSheet.swift in Sources */,
+				21EF11DDBC0A3BE1B9E60D84 /* ReadingsView.swift in Sources */,
+				19FBDE73A7E6FA72BCF60AE5 /* SettingsView.swift in Sources */,
+				AEEF813FDE13AA172EEB5202 /* StatisticsView.swift in Sources */,
+				3A9D615882EBC043EAD9F747 /* TodayView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		909756BA9A4D862B737042B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 34A04005BCAF206EEC990BD9 /* Soma */;
+			targetProxy = 25A640B699F944DC77F1F1FE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		62109CD13419DC10661BC656 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Soma/Soma.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Soma/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelchu.soma;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		6480DAD407B725D293169956 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelchu.soma.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Soma.app/Soma";
+			};
+			name = Debug;
+		};
+		69E8A466A45A1D46824C4711 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Soma/Soma.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Soma/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelchu.soma;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		98E3CF61C168A7602F90D96E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelchu.soma.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Soma.app/Soma";
+			};
+			name = Release;
+		};
+		B639011BA1407F1522A7B80A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+			};
+			name = Debug;
+		};
+		C7667BDF3E2D07ACE9A9875D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2F4094E401716CD67239F709 /* Build configuration list for PBXNativeTarget "SomaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6480DAD407B725D293169956 /* Debug */,
+				98E3CF61C168A7602F90D96E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		88651694C9EF2D25BD8E75A6 /* Build configuration list for PBXProject "Soma" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B639011BA1407F1522A7B80A /* Debug */,
+				C7667BDF3E2D07ACE9A9875D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA761691A51ACBE657F2A897 /* Build configuration list for PBXNativeTarget "Soma" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				62109CD13419DC10661BC656 /* Debug */,
+				69E8A466A45A1D46824C4711 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
 	};
-	rootObject = 244210E48437B6556980A702;
+	rootObject = 244210E48437B6556980A702 /* Project object */;
 }

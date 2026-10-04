@@ -56,7 +56,10 @@ final class HealthKitManager {
     /// correlation type (see note above).
     func requestAuthorization() async throws {
         let share: Set<HKSampleType> = [systolicType, diastolicType, heartRateType]
-        let read: Set<HKObjectType> = [systolicType, diastolicType, heartRateType, bpCorrelationType]
+        // Never include the BP correlation type in read/share authorization —
+        // iOS disallows it (NSInvalidArgumentException). Authorize only the
+        // quantity types; correlations read/write fine on top of those.
+        let read: Set<HKObjectType> = [systolicType, diastolicType, heartRateType]
         try await store.requestAuthorization(toShare: share, read: read)
     }
 

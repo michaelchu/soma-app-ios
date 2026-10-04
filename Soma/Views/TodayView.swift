@@ -212,7 +212,7 @@ struct ThirtyDayBars: View {
     private var dailyAverages: [Double?] {
         let cal = Calendar.current
         let today = cal.startOfDay(for: Date())
-        return (0..<30).map { back in
+        let newestFirst: [Double?] = (0..<30).map { back in
             let day = cal.date(byAdding: .day, value: -back, to: today)!
             let days = sessions.filter {
                 guard let d = parseDateOnly($0.date) else { return false }
@@ -220,7 +220,8 @@ struct ThirtyDayBars: View {
             }
             guard !days.isEmpty else { return nil }
             return days.map { Double($0.diastolic) }.reduce(0, +) / Double(days.count)
-        }.reversed()
+        }
+        return Array(newestFirst.reversed())
     }
 
     var body: some View {

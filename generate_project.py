@@ -13,6 +13,7 @@ import os
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "Soma")
+TEST_SRC = os.path.join(ROOT, "SomaTests")
 PROJDIR = os.path.join(ROOT, "Soma.xcodeproj")
 
 
@@ -62,6 +63,17 @@ resources = [p for p, k in entries if k == "file" and (p.endswith(".ttf") or p.e
 resources += [p for p, k in entries if k == "assetdir"]
 # Info.plist / entitlements are referenced but not in build phases.
 
+# Test sources live under SomaTests/ (sibling of Soma/). They get their own
+# group/target; ids are prefixed to avoid colliding with app paths.
+test_entries = []  # relpath relative to TEST_SRC
+if os.path.isdir(TEST_SRC):
+    for dirpath, dirnames, filenames in os.walk(TEST_SRC):
+        dirnames.sort()
+        for fn in sorted(filenames):
+            if fn == ".DS_Store" or not fn.endswith(".swift"):
+                continue
+            test_entries.append(os.path.relpath(os.path.join(dirpath, fn), TEST_SRC))
+
 lines = []
 A = lines.append
 
@@ -72,6 +84,14 @@ def ref_id(p):
 
 def build_id(p):
     return uid("build:" + p)
+
+
+def test_ref_id(p):
+    return uid("testref:" + p)
+
+
+def test_build_id(p):
+    return uid("testbuild:" + p)
 
 
 A("// !$*UTF8*$!")
@@ -85,6 +105,8 @@ A("\tobjects = {")
 # --- PBXBuildFile ---
 for p in sources + resources:
     A(f"\t\t{build_id(p)} = {{isa = PBXBuildFile; fileRef = {ref_id(p)}; }};")
+for p in test_entries:
+    A(f"\t\t{test_build_id(p)} = {{isa = PBXBuildFile; fileRef = {test_ref_id(p)}; }};")
 
 # --- PBXFileReference (path = basename, relative to parent group) ---
 for p, k in entries:
@@ -96,6 +118,12 @@ for p, k in entries:
     A(f'\t\t{ref_id(p)} = {{isa = PBXFileReference; lastKnownFileType = {ftype}; name = "{name}"; path = "{name}"; sourceTree = "<group>"; }};')
 APP_REF = uid("ref:app")
 A(f"\t\t{APP_REF} = {{isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soma.app; sourceTree = BUILT_PRODUCTS_DIR; }};")
+# Test bundle product + test sources
+TEST_BUNDLE_REF = uid("testref:bundle")
+A(f"\t\t{TEST_BUNDLE_REF} = {{isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SomaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; }};")
+for p in test_entries:
+    name = os.path.basename(p)
+    A(f'\t\t{test_ref_id(p)} = {{isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "{name}"; path = "{name}"; sourceTree = "<group>"; }};')
 
 # --- PBXGroup (mirrors folders; path = basename relative to parent) ---
 dirs = sorted({parent_dir(p) for p, k in entries if k in ("file", "assetdir")} | {"."})
@@ -113,7 +141,10 @@ for d in dirs:
     kids = ", ".join(children)
     A(f'\t\t{dir_id[d]} = {{isa = PBXGroup; children = ({kids}); name = "{name}"; path = "{name}"; sourceTree = "<group>"; }};')
 MAIN_GROUP = uid("group:main")
-A(f'\t\t{MAIN_GROUP} = {{isa = PBXGroup; children = ({dir_id["."]}, {APP_REF}); sourceTree = "<group>"; }};')
+TEST_GROUP = uid("group:test")
+test_kids = ", ".join(test_ref_id(p) for p in test_entries)
+A(f'\t\t{TEST_GROUP} = {{isa = PBXGroup; children = ({test_kids}); name = "SomaTests"; path = "SomaTests"; sourceTree = "<group>"; }};')
+A(f'\t\t{MAIN_GROUP} = {{isa = PBXGroup; children = ({dir_id["."]}, {TEST_GROUP}, {APP_REF}, {TEST_BUNDLE_REF}); sourceTree = "<group>"; }};')
 
 # --- Build phases ---
 SRC_PHASE = uid("phase:sources")
@@ -129,17 +160,34 @@ A("\t\t); runOnlyForDeploymentPostprocessing = 0; };")
 FW_PHASE = uid("phase:frameworks")
 A(f"\t\t{FW_PHASE} = {{isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; }};")
 
-# --- Target ---
+# --- Test target build phases ---
+TEST_SRC_PHASE = uid("testphase:sources")
+A(f"\t\t{TEST_SRC_PHASE} = {{isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (")
+for p in test_entries:
+    A(f"\t\t\t{test_build_id(p)},")
+A("\t\t); runOnlyForDeploymentPostprocessing = 0; };")
+TEST_FW_PHASE = uid("testphase:frameworks")
+A(f"\t\t{TEST_FW_PHASE} = {{isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; }};")
+TEST_RES_PHASE = uid("testphase:resources")
+A(f"\t\t{TEST_RES_PHASE} = {{isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; }};")
+
+# --- Targets ---
 TARGET = uid("target")
 A(f"\t\t{TARGET} = {{isa = PBXNativeTarget; buildConfigurationList = {uid('cfglist:target')}; buildPhases = ({SRC_PHASE}, {FW_PHASE}, {RES_PHASE}); buildRules = (); dependencies = (); name = Soma; productName = Soma; productReference = {APP_REF}; productType = \"com.apple.product-type.application\"; }};")
+TEST_TARGET = uid("target:test")
+TEST_DEP = uid("testdep")
+TEST_PROXY = uid("testproxy")
+A(f"\t\t{TEST_PROXY} = {{isa = PBXContainerItemProxy; containerPortal = {uid('project')}; proxyType = 1; remoteGlobalIDString = {TARGET}; remoteInfo = Soma; }};")
+A(f"\t\t{TEST_DEP} = {{isa = PBXTargetDependency; target = {TARGET}; targetProxy = {TEST_PROXY}; }};")
+A(f"\t\t{TEST_TARGET} = {{isa = PBXNativeTarget; buildConfigurationList = {uid('cfglist:testtarget')}; buildPhases = ({TEST_SRC_PHASE}, {TEST_FW_PHASE}, {TEST_RES_PHASE}); buildRules = (); dependencies = ({TEST_DEP}); name = SomaTests; productName = SomaTests; productReference = {TEST_BUNDLE_REF}; productType = \"com.apple.product-type.bundle.unit-test\"; }};")
 
 # --- Project ---
 PROJECT = uid("project")
-A(f"\t\t{PROJECT} = {{isa = PBXProject; attributes = {{ LastUpgradeCheck = 1600; TargetAttributes = {{ {TARGET} = {{ CreatedOnToolsVersion = 16.0; }}; }}; }}; buildConfigurationList = {uid('cfglist:project')}; compatibilityVersion = \"Xcode 14.0\"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en); mainGroup = {MAIN_GROUP}; productRefGroup = {MAIN_GROUP}; projectDirPath = \"\"; projectRoot = \"\"; targets = ({TARGET}); }};")
+A(f"\t\t{PROJECT} = {{isa = PBXProject; attributes = {{ LastUpgradeCheck = 1600; TargetAttributes = {{ {TARGET} = {{ CreatedOnToolsVersion = 16.0; }}; {TEST_TARGET} = {{ CreatedOnToolsVersion = 16.0; TestTargetID = {TARGET}; }}; }}; }}; buildConfigurationList = {uid('cfglist:project')}; compatibilityVersion = \"Xcode 14.0\"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en); mainGroup = {MAIN_GROUP}; productRefGroup = {MAIN_GROUP}; projectDirPath = \"\"; projectRoot = \"\"; targets = ({TARGET}, {TEST_TARGET}); }};")
 
 
-def xcconfig(name, settings):
-    A(f"\t\t{uid('cfg:' + name)} = {{isa = XCBuildConfiguration; buildSettings = {{")
+def xcconfig(key, name, settings):
+    A(f"\t\t{uid('cfg:' + key)} = {{isa = XCBuildConfiguration; buildSettings = {{")
     for k, v in settings.items():
         A(f"\t\t\t{k} = {v};")
     A(f"\t\t}}; name = {name}; }};")
@@ -160,14 +208,32 @@ common_target = {
     "SWIFT_VERSION": "5.0",
     "TARGETED_DEVICE_FAMILY": '"1"',
 }
-xcconfig("project-Debug", {"ALWAYS_SEARCH_USER_PATHS": "NO", "CLANG_ENABLE_MODULES": "YES"})
-xcconfig("project-Release", {"ALWAYS_SEARCH_USER_PATHS": "NO", "CLANG_ENABLE_MODULES": "YES"})
+xcconfig("project-Debug", "Debug", {"ALWAYS_SEARCH_USER_PATHS": "NO", "CLANG_ENABLE_MODULES": "YES"})
+xcconfig("project-Release", "Release", {"ALWAYS_SEARCH_USER_PATHS": "NO", "CLANG_ENABLE_MODULES": "YES"})
 dbg = dict(common_target); dbg["SWIFT_OPTIMIZATION_LEVEL"] = '"-Onone"'
 dbg["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = "DEBUG"
-xcconfig("target-Debug", dbg)
-xcconfig("target-Release", dict(common_target))
+dbg["ENABLE_TESTABILITY"] = "YES"
+xcconfig("target-Debug", "Debug", dbg)
+xcconfig("target-Release", "Release", dict(common_target))
 
-for kind, cfgs in (("project", ["project-Debug", "project-Release"]), ("target", ["target-Debug", "target-Release"])):
+# Test target configs (logic tests; @testable import needs the app's testability above)
+common_test = {
+    "BUNDLE_LOADER": '"$(TEST_HOST)"',
+    "CODE_SIGN_STYLE": "Automatic",
+    "IPHONEOS_DEPLOYMENT_TARGET": "17.0",
+    "PRODUCT_BUNDLE_IDENTIFIER": '"com.michaelchu.soma.tests"',
+    "PRODUCT_NAME": '"$(TARGET_NAME)"',
+    "SWIFT_EMIT_LOC_STRINGS": "YES",
+    "SWIFT_VERSION": "5.0",
+    "TARGETED_DEVICE_FAMILY": '"1"',
+    "TEST_HOST": '"$(BUILT_PRODUCTS_DIR)/Soma.app/Soma"',
+}
+test_dbg = dict(common_test); test_dbg["SWIFT_OPTIMIZATION_LEVEL"] = '"-Onone"'
+test_dbg["SWIFT_ACTIVE_COMPILATION_CONDITIONS"] = "DEBUG"
+xcconfig("testtarget-Debug", "Debug", test_dbg)
+xcconfig("testtarget-Release", "Release", dict(common_test))
+
+for kind, cfgs in (("project", ["project-Debug", "project-Release"]), ("target", ["target-Debug", "target-Release"]), ("testtarget", ["testtarget-Debug", "testtarget-Release"])):
     ids = ", ".join(uid("cfg:" + c) for c in cfgs)
     A(f"\t\t{uid('cfglist:' + kind)} = {{isa = XCConfigurationList; buildConfigurations = ({ids}); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; }};")
 

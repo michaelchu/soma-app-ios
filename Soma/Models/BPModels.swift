@@ -4,7 +4,7 @@ import Foundation
 // (types/bloodPressure.ts, lib/db/bloodPressure.ts, pages/blood-pressure/utils/bpHelpers.ts,
 //  pages/blood-pressure/constants/bpGuidelines.ts — default guideline: HTN Canada 2025)
 
-enum TimeOfDay: String, Codable, CaseIterable, Identifiable {
+enum TimeOfDay: String, Codable, CaseIterable, Identifiable, Equatable {
     case morning, afternoon, evening
 
     var id: String { rawValue }
@@ -133,7 +133,7 @@ func groupRowsIntoSessions(_ rows: [BPReadingRow]) -> [BPSession] {
 
 // MARK: - BP categories (HTN Canada 2025 — the web app's DEFAULT_GUIDELINE)
 
-enum BPCategory: CaseIterable {
+enum BPCategory: CaseIterable, Equatable {
     case normal
     case hypertension // "Hypertension"
     case hypertensionTreat // "HTN (Treat)"
@@ -288,7 +288,7 @@ func filterSessions(_ sessions: [BPSession], dateRange: DateRange, timeOfDay: Ti
 
 // MARK: - Change indicator (port of getChangeType in ChangeIndicator.tsx)
 
-enum ChangeType {
+enum ChangeType: Equatable {
     case improving
     case worsening
     case neutral

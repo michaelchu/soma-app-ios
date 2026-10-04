@@ -4,7 +4,7 @@ import Foundation
 //
 // Talks to the Soma Vercel serverless API (api/blood-pressure.ts etc.) over HTTPS.
 // The API requires a bearer token (see ../../soma-api-auth/README.md for the
-// server-side setup). The token lives in the Keychain; the base URL in UserDefaults.
+// server-side setup). The token lives in the Keychain; the base URL is hardcoded.
 
 enum APIError: LocalizedError {
     case notConfigured
@@ -15,7 +15,7 @@ enum APIError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .notConfigured: return "API URL or token is not configured. Open Settings to set it up."
+        case .notConfigured: return "API token is not configured. Open Settings to set it up."
         case .unauthorized: return "The API rejected the token (401). Check the token in Settings."
         case .requestFailed(let code, let msg): return "Request failed (\(code)): \(msg)"
         case .decodingFailed: return "Could not understand the server response."
@@ -28,22 +28,17 @@ final class SomaAPIClient {
     static let shared = SomaAPIClient()
     private init() {}
 
-    private let baseURLKey = "soma.apiBaseURL"
-
-    var baseURLString: String {
-        get { UserDefaults.standard.string(forKey: baseURLKey) ?? "" }
-        set { UserDefaults.standard.set(newValue, forKey: baseURLKey) }
-    }
+    /// The Soma web app's production URL. Hardcoded — the server and the app
+    /// ship together, so there's no reason to make the user type it.
+    private let baseURLString = "https://use-soma.vercel.app"
 
     var isConfigured: Bool {
-        !baseURLString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            && !(KeychainHelper.loadToken()?.isEmpty ?? true)
+        !(KeychainHelper.loadToken()?.isEmpty ?? true)
     }
 
     private func makeRequest(path: String, method: String, body: Data? = nil) throws -> URLRequest {
-        let base = baseURLString.trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        guard !base.isEmpty, let token = KeychainHelper.loadToken(), !token.isEmpty,
-              let url = URL(string: base + path) else {
+        guard let token = KeychainHelper.loadToken(), !token.isEmpty,
+              let url = URL(string: baseURLString + path) else {
             throw APIError.notConfigured
         }
         var req = URLRequest(url: url)
