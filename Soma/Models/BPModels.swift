@@ -268,7 +268,20 @@ func parseDateOnly(_ s: String, calendar: Calendar = .current) -> Date? {
     guard parts.count == 3 else { return nil }
     var comps = DateComponents()
     comps.year = parts[0]; comps.month = parts[1]; comps.day = parts[2]
-    return calendar.date(from: comps)
+    guard let date = calendar.date(from: comps) else { return nil }
+    let resolved = calendar.dateComponents([.year, .month, .day], from: date)
+    guard resolved.year == comps.year,
+          resolved.month == comps.month,
+          resolved.day == comps.day else { return nil }
+    return date
+}
+
+func isValidBloodPressureInput(systolic: String, diastolic: String, pulse: String) -> Bool {
+    guard let systolicValue = Int(systolic),
+          let diastolicValue = Int(diastolic),
+          (40...300).contains(systolicValue),
+          (30...200).contains(diastolicValue) else { return false }
+    return pulse.isEmpty || Int(pulse).map { (30...250).contains($0) } == true
 }
 
 /// Port of filterReadings (FilterBar.tsx).

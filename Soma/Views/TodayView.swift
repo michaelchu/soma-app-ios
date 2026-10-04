@@ -103,13 +103,21 @@ struct TodayView: View {
                                 .foregroundColor(SomaTheme.muted)
                         }
                         Spacer()
-                        Toggle("", isOn: $reminders.isEnabled)
-                            .tint(SomaTheme.rose)
-                            .onChange(of: reminders.isEnabled) { _, on in
-                                if on {
-                                    Task { _ = await reminders.requestPermission() }
+                        Toggle("", isOn: Binding(
+                            get: { reminders.isEnabled },
+                            set: { enabled in
+                                if enabled {
+                                    Task {
+                                        if await reminders.requestPermission() {
+                                            reminders.isEnabled = true
+                                        }
+                                    }
+                                } else {
+                                    reminders.isEnabled = false
                                 }
                             }
+                        ))
+                            .tint(SomaTheme.rose)
                     }
                     .padding(14)
                     .background(SomaTheme.card)
@@ -119,6 +127,13 @@ struct TodayView: View {
                             .stroke(SomaTheme.border, lineWidth: 1)
                     )
                     .padding(.top, 14)
+
+                    if let reminderError = reminders.errorMessage {
+                        Text(reminderError)
+                            .font(SomaFont.regular(12))
+                            .foregroundColor(SomaTheme.categoryTreatText)
+                            .padding(.top, 6)
+                    }
 
                     // Recent Activity (mirrors web Timeline: 30 days, date headers)
                     Text("Recent Activity")

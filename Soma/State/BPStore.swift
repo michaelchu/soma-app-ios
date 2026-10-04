@@ -1,6 +1,26 @@
 import Foundation
 import SwiftUI
 
+protocol SomaAPIClientProtocol {
+    var isConfigured: Bool { get }
+    func fetchBloodPressureRows() async throws -> [BPReadingRow]
+    func createSession(
+        date: String,
+        timeOfDay: TimeOfDay,
+        readings: [SomaAPIClient.NewReading],
+        notes: String?
+    ) async throws -> String
+    func deleteSession(sessionId: String) async throws
+}
+
+protocol HealthKitManagerProtocol {
+    func saveReading(systolic: Int, diastolic: Int, pulse: Int?, date: Date) async throws
+    func fetchBloodPressureSamples(daysBack: Int) async throws -> [HealthSampleReading]
+}
+
+extension SomaAPIClient: SomaAPIClientProtocol {}
+extension HealthKitManager: HealthKitManagerProtocol {}
+
 // MARK: - Central BP state (mirrors the web BPContext / useReadings hook)
 
 @MainActor
@@ -11,8 +31,19 @@ final class BPStore: ObservableObject {
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
 
-    private let api = SomaAPIClient.shared
-    private let healthKit = HealthKitManager.shared
+    private let api: any SomaAPIClientProtocol
+    private let healthKit: any HealthKitManagerProtocol
+    private let defaults: UserDefaults
+
+    init(
+        api: any SomaAPIClientProtocol = SomaAPIClient.shared,
+        healthKit: any HealthKitManagerProtocol = HealthKitManager.shared,
+        defaults: UserDefaults = .standard
+    ) {
+        self.api = api
+        self.healthKit = healthKit
+        self.defaults = defaults
+    }
 
     var isConfigured: Bool { api.isConfigured }
 
@@ -77,6 +108,7 @@ final class BPStore: ObservableObject {
         sessions.removeAll { $0.sessionId == session.sessionId }
         do {
             try await api.deleteSession(sessionId: session.sessionId)
+            rememberDeletedHealthKitKeys(Self.dedupeKeys(for: session))
         } catch {
             // Restore on failure
             sessions = removed
@@ -92,10 +124,16 @@ final class BPStore: ObservableObject {
         var imported = 0
         var skipped = 0
         do {
-            let samples = try await healthKit.fetchBloodPressureSamples()
-            let existingKeys = Set(sessions.map { Self.dedupeKey(date: $0.date, sys: $0.systolic, dia: $0.diastolic) })
+            let samples = try await healthKit.fetchBloodPressureSamples(daysBack: 365)
+            var existingKeys = Set(sessions.flatMap(Self.dedupeKeys(for:)))
+            existingKeys.formUnion(deletedHealthKitKeys)
             for sample in samples {
-                let key = Self.dedupeKey(date: sample.dateString, sys: sample.systolic, dia: sample.diastolic)
+                let key = Self.dedupeKey(
+                    date: sample.dateString,
+                    timeOfDay: sample.timeOfDay,
+                    sys: sample.systolic,
+                    dia: sample.diastolic
+                )
                 if existingKeys.contains(key) {
                     skipped += 1
                     continue
@@ -106,6 +144,7 @@ final class BPStore: ObservableObject {
                     readings: [.init(systolic: sample.systolic, diastolic: sample.diastolic, pulse: sample.pulse, arm: nil)],
                     notes: "Imported from Apple Health"
                 )
+                existingKeys.insert(key)
                 imported += 1
             }
             if imported > 0 { await load() }
@@ -115,7 +154,34 @@ final class BPStore: ObservableObject {
         return (imported, skipped)
     }
 
-    private static func dedupeKey(date: String, sys: Int, dia: Int) -> String {
-        "\(date)|\(sys)|\(dia)"
+    static func dedupeKey(date: String, timeOfDay: TimeOfDay, sys: Int, dia: Int) -> String {
+        "\(date)|\(timeOfDay.rawValue)|\(sys)|\(dia)"
+    }
+
+    static func dedupeKeys(for session: BPSession) -> Set<String> {
+        guard !session.readings.isEmpty else {
+            return [dedupeKey(
+                date: session.date,
+                timeOfDay: session.timeOfDay,
+                sys: session.systolic,
+                dia: session.diastolic
+            )]
+        }
+        return Set(session.readings.map {
+            dedupeKey(date: $0.date, timeOfDay: $0.timeOfDay, sys: $0.systolic, dia: $0.diastolic)
+        })
+    }
+
+    private static let deletedHealthKitKeysDefaultsKey = "soma.deletedHealthKitReadingKeys"
+
+    private var deletedHealthKitKeys: Set<String> {
+        Set(defaults.stringArray(forKey: Self.deletedHealthKitKeysDefaultsKey) ?? [])
+    }
+
+    private func rememberDeletedHealthKitKeys(_ keys: Set<String>) {
+        defaults.set(
+            Array(deletedHealthKitKeys.union(keys)),
+            forKey: Self.deletedHealthKitKeysDefaultsKey
+        )
     }
 }

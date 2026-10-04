@@ -7,6 +7,8 @@ import UserNotifications
 final class ReminderManager: ObservableObject {
     static let shared = ReminderManager()
 
+    @Published private(set) var errorMessage: String?
+
     private let enabledKey = "soma.reminderEnabled"
     private let timeKey = "soma.reminderTime" // seconds since midnight
 
@@ -50,9 +52,25 @@ final class ReminderManager: ObservableObject {
 
     func requestPermission() async -> Bool {
         do {
-            return try await UNUserNotificationCenter.current()
-                .requestAuthorization(options: [.alert, .sound, .badge])
+            let center = UNUserNotificationCenter.current()
+            let settings = await center.notificationSettings()
+            switch settings.authorizationStatus {
+            case .authorized, .provisional, .ephemeral:
+                errorMessage = nil
+                return true
+            case .notDetermined:
+                let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
+                errorMessage = granted ? nil : "Notifications are disabled. Enable them in Settings to use reminders."
+                return granted
+            case .denied:
+                errorMessage = "Notifications are disabled. Enable them in Settings to use reminders."
+                return false
+            @unknown default:
+                errorMessage = "Could not determine notification permission."
+                return false
+            }
         } catch {
+            errorMessage = error.localizedDescription
             return false
         }
     }
@@ -77,6 +95,10 @@ final class ReminderManager: ObservableObject {
             content: content,
             trigger: trigger
         )
-        center.add(request)
+        center.add(request) { [weak self] error in
+            Task { @MainActor in
+                self?.errorMessage = error?.localizedDescription
+            }
+        }
     }
 }

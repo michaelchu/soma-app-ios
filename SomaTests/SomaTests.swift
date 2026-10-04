@@ -48,6 +48,18 @@ final class BPSessionMathTests: XCTestCase {
 }
 
 final class SessionGroupingTests: XCTestCase {
+    @MainActor
+    func testDedupeKeysUseIndividualReadingsInsteadOfSessionAverage() {
+        let rows = [
+            makeRow(id: "r1", session: "s1", sys: 120, dia: 80),
+            makeRow(id: "r2", session: "s1", sys: 130, dia: 90),
+        ]
+        let session = groupRowsIntoSessions(rows)[0]
+
+        XCTAssertEqual(BPStore.dedupeKeys(for: session), ["2026-09-24|morning|120|80", "2026-09-24|morning|130|90"])
+        XCTAssertFalse(BPStore.dedupeKeys(for: session).contains("2026-09-24|morning|125|85"))
+    }
+
     func testGroupsRowsBySessionId() {
         let rows = [
             makeRow(id: "r1", session: "s1", sys: 120, dia: 80),
@@ -209,6 +221,7 @@ final class DateFormatTests: XCTestCase {
         XCTAssertEqual(comps.month, 9)
         XCTAssertEqual(comps.day, 24)
         XCTAssertNil(parseDateOnly("not-a-date"))
+        XCTAssertNil(parseDateOnly("2026-02-31"))
     }
 
     func testFormatSessionDate() {
@@ -224,6 +237,107 @@ final class DateFormatTests: XCTestCase {
         XCTAssertEqual(formatTimelineHeader(df.string(from: now)), "Today")
         let yesterday = cal.date(byAdding: .day, value: -1, to: now)!
         XCTAssertEqual(formatTimelineHeader(df.string(from: yesterday)), "Yesterday")
+    }
+}
+
+final class ReadingInputValidationTests: XCTestCase {
+    func testAcceptsBoundaryValuesAndOptionalPulse() {
+        XCTAssertTrue(isValidBloodPressureInput(systolic: "40", diastolic: "30", pulse: ""))
+        XCTAssertTrue(isValidBloodPressureInput(systolic: "300", diastolic: "200", pulse: "30"))
+        XCTAssertTrue(isValidBloodPressureInput(systolic: "120", diastolic: "80", pulse: "250"))
+    }
+
+    func testRejectsInvalidValues() {
+        XCTAssertFalse(isValidBloodPressureInput(systolic: "39", diastolic: "80", pulse: "70"))
+        XCTAssertFalse(isValidBloodPressureInput(systolic: "120", diastolic: "201", pulse: "70"))
+        XCTAssertFalse(isValidBloodPressureInput(systolic: "120", diastolic: "80", pulse: "29"))
+        XCTAssertFalse(isValidBloodPressureInput(systolic: "120", diastolic: "80", pulse: "251"))
+        XCTAssertFalse(isValidBloodPressureInput(systolic: "120", diastolic: "80", pulse: "invalid"))
+    }
+}
+
+@MainActor
+final class BPStoreTests: XCTestCase {
+    func testSyncDeduplicatesIdenticalSamplesWithinOneBatch() async {
+        let api = FakeAPIClient()
+        let health = FakeHealthKitManager(samples: [makeHealthSample(), makeHealthSample()])
+        let store = BPStore(api: api, healthKit: health, defaults: makeDefaults())
+
+        let result = await store.syncFromHealthKit()
+
+        XCTAssertEqual(result.imported, 1)
+        XCTAssertEqual(result.skipped, 1)
+        XCTAssertEqual(api.createdSessions.count, 1)
+    }
+
+    func testSyncTreatsDifferentTimesOfDayAsDistinct() async {
+        let api = FakeAPIClient()
+        let health = FakeHealthKitManager(samples: [
+            makeHealthSample(timeOfDay: .morning),
+            makeHealthSample(timeOfDay: .evening),
+        ])
+        let store = BPStore(api: api, healthKit: health, defaults: makeDefaults())
+
+        let result = await store.syncFromHealthKit()
+
+        XCTAssertEqual(result.imported, 2)
+        XCTAssertEqual(result.skipped, 0)
+    }
+
+    func testSuccessfulDeletePreventsHealthKitReimport() async {
+        let defaults = makeDefaults()
+        let api = FakeAPIClient(rows: [makeRow(id: "r1", session: "s1", sys: 120, dia: 80)])
+        let health = FakeHealthKitManager(samples: [makeHealthSample()])
+        let store = BPStore(api: api, healthKit: health, defaults: defaults)
+        await store.load()
+
+        await store.deleteSession(store.sessions[0])
+        let result = await store.syncFromHealthKit()
+
+        XCTAssertEqual(result.imported, 0)
+        XCTAssertEqual(result.skipped, 1)
+        XCTAssertTrue(store.sessions.isEmpty)
+    }
+
+    func testFailedDeleteRestoresStateAndDoesNotCreateTombstone() async {
+        let defaults = makeDefaults()
+        let api = FakeAPIClient(rows: [makeRow(id: "r1", session: "s1", sys: 120, dia: 80)])
+        api.deleteError = TestFailure.expected
+        let store = BPStore(api: api, healthKit: FakeHealthKitManager(), defaults: defaults)
+        await store.load()
+
+        await store.deleteSession(store.sessions[0])
+
+        XCTAssertEqual(store.sessions.map(\.sessionId), ["s1"])
+
+        let importAPI = FakeAPIClient()
+        let importStore = BPStore(
+            api: importAPI,
+            healthKit: FakeHealthKitManager(samples: [makeHealthSample()]),
+            defaults: defaults
+        )
+        let result = await importStore.syncFromHealthKit()
+        XCTAssertEqual(result.imported, 1)
+    }
+
+    func testFailedRefreshPreservesPreviouslyLoadedSessionsAndClearsLoading() async {
+        let api = FakeAPIClient(rows: [makeRow(id: "r1", session: "s1", sys: 120, dia: 80)])
+        let store = BPStore(api: api, healthKit: FakeHealthKitManager(), defaults: makeDefaults())
+        await store.load()
+        api.fetchError = TestFailure.expected
+
+        await store.load()
+
+        XCTAssertEqual(store.sessions.map(\.sessionId), ["s1"])
+        XCTAssertFalse(store.isLoading)
+        XCTAssertNotNil(store.errorMessage)
+    }
+
+    private func makeDefaults() -> UserDefaults {
+        let suiteName = "SomaTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defaults.removePersistentDomain(forName: suiteName)
+        return defaults
     }
 }
 
@@ -257,4 +371,71 @@ private func makeRow(id: String, session: String, sys: Int, dia: Int, pulse: Int
         notes: notes,
         cuffLocation: nil
     )
+}
+
+private func makeHealthSample(timeOfDay: TimeOfDay = .morning) -> HealthSampleReading {
+    HealthSampleReading(
+        date: Date(timeIntervalSince1970: 1_790_208_000),
+        dateString: "2026-09-24",
+        timeOfDay: timeOfDay,
+        systolic: 120,
+        diastolic: 80,
+        pulse: 70
+    )
+}
+
+private enum TestFailure: Error {
+    case expected
+}
+
+private final class FakeAPIClient: SomaAPIClientProtocol {
+    var isConfigured = true
+    var rows: [BPReadingRow]
+    var fetchError: Error?
+    var createError: Error?
+    var deleteError: Error?
+    private(set) var createdSessions: [(date: String, timeOfDay: TimeOfDay)] = []
+
+    init(rows: [BPReadingRow] = []) {
+        self.rows = rows
+    }
+
+    func fetchBloodPressureRows() async throws -> [BPReadingRow] {
+        if let fetchError { throw fetchError }
+        return rows
+    }
+
+    func createSession(
+        date: String,
+        timeOfDay: TimeOfDay,
+        readings: [SomaAPIClient.NewReading],
+        notes: String?
+    ) async throws -> String {
+        if let createError { throw createError }
+        createdSessions.append((date, timeOfDay))
+        return "created-\(createdSessions.count)"
+    }
+
+    func deleteSession(sessionId: String) async throws {
+        if let deleteError { throw deleteError }
+    }
+}
+
+private final class FakeHealthKitManager: HealthKitManagerProtocol {
+    var samples: [HealthSampleReading]
+    var fetchError: Error?
+    var saveError: Error?
+
+    init(samples: [HealthSampleReading] = []) {
+        self.samples = samples
+    }
+
+    func saveReading(systolic: Int, diastolic: Int, pulse: Int?, date: Date) async throws {
+        if let saveError { throw saveError }
+    }
+
+    func fetchBloodPressureSamples(daysBack: Int) async throws -> [HealthSampleReading] {
+        if let fetchError { throw fetchError }
+        return samples
+    }
 }

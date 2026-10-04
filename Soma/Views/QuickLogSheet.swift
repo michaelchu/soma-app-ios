@@ -18,8 +18,7 @@ struct QuickLogSheet: View {
     @State private var error: String?
 
     private var isValid: Bool {
-        guard let s = Int(systolic), let d = Int(diastolic) else { return false }
-        return (40...300).contains(s) && (30...200).contains(d)
+        isValidBloodPressureInput(systolic: systolic, diastolic: diastolic, pulse: pulse)
     }
 
     var body: some View {
@@ -69,6 +68,11 @@ struct QuickLogSheet: View {
                             TextField("—", text: $pulse)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(SomaFieldStyle())
+                            if !pulse.isEmpty && Int(pulse).map({ (30...250).contains($0) }) != true {
+                                Text("Enter a pulse from 30 to 250 bpm.")
+                                    .font(SomaFont.regular(11))
+                                    .foregroundColor(SomaTheme.categoryTreatText)
+                            }
                         }
                         // Arm
                         VStack(alignment: .leading, spacing: 8) {

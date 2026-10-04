@@ -14,6 +14,7 @@ struct SettingsView: View {
     @State private var showToken = false
     @State private var savedMessage: String?
     @State private var isConnected = false
+    @State private var isConnecting = false
     @State private var hkStatus: String = "Not connected"
     @State private var isSyncing = false
     @State private var syncMessage: String?
@@ -56,9 +57,10 @@ struct SettingsView: View {
                             .foregroundColor(SomaTheme.muted)
                     } else {
                         Button("Save & Connect") {
-                            saveAPIConfig()
+                            Task { _ = await saveAPIConfig() }
                         }
                         .tint(SomaTheme.rose)
+                        .disabled(token.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isConnecting)
                     }
                     if let savedMessage {
                         Text(savedMessage)
@@ -134,10 +136,13 @@ struct SettingsView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     if isFirstRun {
                         Button("Done") {
-                            saveAPIConfig()
-                            onDone?()
+                            Task {
+                                if await saveAPIConfig() {
+                                    onDone?()
+                                }
+                            }
                         }
-                        .disabled(token.isEmpty)
+                        .disabled(token.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isConnecting)
                     } else {
                         Button("Done") { dismiss() }
                     }
@@ -161,17 +166,25 @@ struct SettingsView: View {
         .tint(SomaTheme.rose)
     }
 
-    private func saveAPIConfig() {
-        _ = KeychainHelper.saveToken(token.trimmingCharacters(in: .whitespacesAndNewlines))
-        Task {
-            await store.load()
-            if store.errorMessage == nil {
-                savedMessage = "Connected — \(store.sessions.count) sessions loaded."
-                isConnected = true
-            } else {
-                savedMessage = store.errorMessage
-                isConnected = false
-            }
+    private func saveAPIConfig() async -> Bool {
+        isConnecting = true
+        defer { isConnecting = false }
+
+        guard KeychainHelper.saveToken(token.trimmingCharacters(in: .whitespacesAndNewlines)) else {
+            savedMessage = "Could not securely save the API token."
+            isConnected = false
+            return false
+        }
+
+        await store.load()
+        if store.errorMessage == nil {
+            savedMessage = "Connected — \(store.sessions.count) sessions loaded."
+            isConnected = true
+            return true
+        } else {
+            savedMessage = store.errorMessage
+            isConnected = false
+            return false
         }
     }
 }
