@@ -13,6 +13,7 @@ struct SettingsView: View {
     @State private var token: String = KeychainHelper.loadToken() ?? ""
     @State private var showToken = false
     @State private var savedMessage: String?
+    @State private var isConnected = false
     @State private var hkStatus: String = "Not connected"
     @State private var isSyncing = false
     @State private var syncMessage: String?
@@ -46,10 +47,19 @@ struct SettingsView: View {
                     }
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                    Button("Save & Connect") {
-                        saveAPIConfig()
+                    .onChange(of: token) { _ in
+                        isConnected = false
+                        savedMessage = nil
                     }
-                    .tint(SomaTheme.rose)
+                    if isConnected {
+                        Text("Connected")
+                            .foregroundColor(SomaTheme.muted)
+                    } else {
+                        Button("Save & Connect") {
+                            saveAPIConfig()
+                        }
+                        .tint(SomaTheme.rose)
+                    }
                     if let savedMessage {
                         Text(savedMessage)
                             .font(SomaFont.regular(13))
@@ -139,6 +149,12 @@ struct SettingsView: View {
                 case .denied: hkStatus = "Denied"
                 case .notDetermined: hkStatus = "Not connected"
                 }
+                // If a token is already saved and data loaded, reflect the connected state.
+                if let saved = KeychainHelper.loadToken(), !saved.isEmpty,
+                   saved == token, store.errorMessage == nil, !store.sessions.isEmpty {
+                    isConnected = true
+                    savedMessage = "Connected — \(store.sessions.count) sessions loaded."
+                }
             }
         }
         .preferredColorScheme(.dark)
@@ -151,8 +167,10 @@ struct SettingsView: View {
             await store.load()
             if store.errorMessage == nil {
                 savedMessage = "Connected — \(store.sessions.count) sessions loaded."
+                isConnected = true
             } else {
                 savedMessage = store.errorMessage
+                isConnected = false
             }
         }
     }

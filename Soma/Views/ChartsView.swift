@@ -102,20 +102,67 @@ struct TimelineChart: View {
         }
     }
 
-    /// Linear-regression trendline over systolic (matches web trendline).
-    private var trend: [(date: Date, value: Double)] {
+    private struct ChartPoint: Identifiable {
+        let id = UUID()
+        let date: Date
+        let value: Double
+        let series: String
+    }
+
+    /// All line data as a flat array with series labels (canonical Swift Charts pattern).
+    private var linePoints: [ChartPoint] {
+        var pts: [ChartPoint] = []
+        for p in points {
+            pts.append(ChartPoint(date: p.date, value: Double(p.sys), series: "Systolic"))
+            pts.append(ChartPoint(date: p.date, value: Double(p.dia), series: "Diastolic"))
+            if showMAP {
+                pts.append(ChartPoint(date: p.date, value: Double(p.map), series: "MAP"))
+            }
+        }
+        if showTrendline {
+            for t in sysTrend {
+                pts.append(ChartPoint(date: t.date, value: t.value, series: "Sys Trend"))
+            }
+            for t in diaTrend {
+                pts.append(ChartPoint(date: t.date, value: t.value, series: "Dia Trend"))
+            }
+        }
+        return pts.sorted { $0.date < $1.date }
+    }
+
+    private var markerPoints: [ChartPoint] {
+        var pts: [ChartPoint] = []
+        for p in points {
+            pts.append(ChartPoint(date: p.date, value: Double(p.sys), series: "Systolic"))
+            pts.append(ChartPoint(date: p.date, value: Double(p.dia), series: "Diastolic"))
+        }
+        return pts
+    }
+
+    /// Linear-regression trendline (matches web: separate regressions for sys and dia,
+    /// x = point index, not timestamp).
+    private var sysTrend: [(date: Date, value: Double)] {
+        linearTrend(values: points.map { Double($0.sys) })
+    }
+
+    private var diaTrend: [(date: Date, value: Double)] {
+        linearTrend(values: points.map { Double($0.dia) })
+    }
+
+    private func linearTrend(values: [Double]) -> [(date: Date, value: Double)] {
         let pts = points
-        guard pts.count >= 2 else { return [] }
-        let xs = pts.map { $0.date.timeIntervalSince1970 }
-        let ys = pts.map { Double($0.sys) }
+        guard pts.count >= 2, values.count == pts.count else { return [] }
         let n = Double(pts.count)
-        let meanX = xs.reduce(0, +) / n, meanY = ys.reduce(0, +) / n
-        let num = zip(xs, ys).map { ($0 - meanX) * ($1 - meanY) }.reduce(0, +)
-        let den = xs.map { ($0 - meanX) * ($0 - meanX) }.reduce(0, +)
+        // Web regresses on point index (0, 1, 2, ...), not on timestamp.
+        let xs = (0..<pts.count).map { Double($0) }
+        let sumX = xs.reduce(0, +), sumY = values.reduce(0, +)
+        let sumXY = zip(xs, values).map(*).reduce(0, +)
+        let sumX2 = xs.map { $0 * $0 }.reduce(0, +)
+        let den = n * sumX2 - sumX * sumX
         guard den != 0 else { return [] }
-        let slope = num / den
-        let intercept = meanY - slope * meanX
-        return pts.map { (date: $0.date, value: slope * $0.date.timeIntervalSince1970 + intercept) }
+        let slope = (n * sumXY - sumX * sumY) / den
+        let intercept = (sumY - slope * sumX) / n
+        return pts.enumerated().map { (i, p) in (date: p.date, value: slope * Double(i) + intercept) }
     }
 
     var body: some View {
@@ -129,53 +176,32 @@ struct TimelineChart: View {
             .padding(.horizontal, 6)
 
             Chart {
-                ForEach(points) { p in
+                ForEach(linePoints) { p in
                     LineMark(
                         x: .value("Date", p.date),
-                        y: .value("Systolic", p.sys)
+                        y: .value("Value", p.value)
                     )
-                    .foregroundStyle(SomaTheme.systolic)
-                    .lineStyle(StrokeStyle(lineWidth: 2))
-                    .interpolationMethod(.catmullRom)
-
-                    LineMark(
-                        x: .value("Date", p.date),
-                        y: .value("Diastolic", p.dia)
-                    )
-                    .foregroundStyle(SomaTheme.diastolic)
-                    .lineStyle(StrokeStyle(lineWidth: 2))
-                    .interpolationMethod(.catmullRom)
-
-                    if showMAP {
-                        LineMark(
-                            x: .value("Date", p.date),
-                            y: .value("MAP", p.map)
-                        )
-                        .foregroundStyle(SomaTheme.slate)
-                        .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
-                    }
-
-                    if showMarkers {
-                        PointMark(x: .value("Date", p.date), y: .value("Systolic", p.sys))
-                            .foregroundStyle(SomaTheme.systolic)
-                            .symbolSize(30)
-                        PointMark(x: .value("Date", p.date), y: .value("Diastolic", p.dia))
-                            .foregroundStyle(SomaTheme.diastolic)
-                            .symbolSize(30)
-                    }
+                    .foregroundStyle(by: .value("Series", p.series))
+                    .lineStyle(lineStyle(for: p.series))
                 }
-
-                if showTrendline {
-                    ForEach(trend, id: \.date) { t in
-                        LineMark(
-                            x: .value("Date", t.date),
-                            y: .value("Trend", t.value)
+                if showMarkers {
+                    ForEach(markerPoints) { p in
+                        PointMark(
+                            x: .value("Date", p.date),
+                            y: .value("Value", p.value)
                         )
-                        .foregroundStyle(SomaTheme.systolic.opacity(0.45))
-                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 4]))
+                        .foregroundStyle(by: .value("Series", p.series))
+                        .symbolSize(30)
                     }
                 }
             }
+            .chartForegroundStyleScale([
+                "Systolic": SomaTheme.systolic,
+                "Diastolic": SomaTheme.diastolic,
+                "MAP": SomaTheme.slate,
+                "Sys Trend": SomaTheme.systolic.opacity(0.45),
+                "Dia Trend": SomaTheme.diastolic.opacity(0.45),
+            ])
             .chartXAxis {
                 AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                     AxisGridLine().foregroundStyle(SomaTheme.border)
@@ -209,6 +235,17 @@ struct TimelineChart: View {
                 .fill(color)
                 .frame(width: 14, height: 3)
             Text(label)
+        }
+    }
+
+    private func lineStyle(for series: String) -> StrokeStyle {
+        switch series {
+        case "MAP":
+            return StrokeStyle(lineWidth: 1.5, dash: [5, 4])
+        case "Sys Trend", "Dia Trend":
+            return StrokeStyle(lineWidth: 1, dash: [3, 4])
+        default:
+            return StrokeStyle(lineWidth: 2)
         }
     }
 }

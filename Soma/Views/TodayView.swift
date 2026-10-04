@@ -156,27 +156,44 @@ func bpInsights(sessions: [BPSession]) -> [String] {
         return ["Keep tracking to get personalized insights about your health patterns."]
     }
 
-    // Trend: linear regression of diastolic over the last 60 days -> points/month.
-    // (Web: trendModifier > 0 means trending down.)
-    let cutoff = Calendar.current.date(byAdding: .day, value: -60, to: Date())!
-    let recent = sessions.filter { (parseDateOnly($0.date) ?? .distantPast) >= cutoff }
-        .sorted { $0.date < $1.date }
-    if recent.count >= 5 {
-        let xs = recent.compactMap { parseDateOnly($0.date)?.timeIntervalSince1970 }
-        let ys = recent.map { Double($0.diastolic) }
-        let slope = linearSlope(xs: xs, ys: ys) // diastolic points per second
-        let pointsPerMonth = -slope * 30 * 24 * 3600
-        if pointsPerMonth > 0.5 {
-            insights.append("BP is trending down by \(Int(pointsPerMonth.rounded())) points - good progress!")
-        } else if pointsPerMonth < -0.5 {
+    // Trend: port of calculateBPTrendModifier (healthScore.ts).
+    // Split sorted readings into halves, compare avg sys+dia.
+    let sorted = sessions.sorted { $0.date < $1.date }
+    if sorted.count >= 4 {
+        let midpoint = sorted.count / 2
+        let older = Array(sorted[..<midpoint])
+        let recent = Array(sorted[midpoint...])
+        let olderAvgSys = older.map { Double($0.systolic) }.reduce(0, +) / Double(older.count)
+        let recentAvgSys = recent.map { Double($0.systolic) }.reduce(0, +) / Double(recent.count)
+        let olderAvgDia = older.map { Double($0.diastolic) }.reduce(0, +) / Double(older.count)
+        let recentAvgDia = recent.map { Double($0.diastolic) }.reduce(0, +) / Double(recent.count)
+        let avgDiff = ((recentAvgSys - olderAvgSys) + (recentAvgDia - olderAvgDia)) / 2
+        // Web: improving by >5 = +10, 2-5 = +5; worsening by >5 = -10, 2-5 = -5
+        let trendModifier: Int
+        if avgDiff < -5 { trendModifier = 10 }
+        else if avgDiff < -2 { trendModifier = 5 }
+        else if avgDiff > 5 { trendModifier = -10 }
+        else if avgDiff > 2 { trendModifier = -5 }
+        else { trendModifier = 0 }
+
+        if trendModifier > 0 {
+            insights.append("BP is trending down by \(abs(trendModifier)) points - good progress!")
+        } else if trendModifier < 0 {
             insights.append("BP has been trending up recently. Monitor and consider lifestyle adjustments.")
         }
     }
 
-    // Variability: SD of diastolic (web: variabilityPenalty > 10)
-    let dias = sessions.map { Double($0.diastolic) }
-    if dias.count >= 5, standardDeviation(dias) > 8 {
-        insights.append("Your BP readings show high variability. Try measuring at consistent times.")
+    // Variability: port of calculateVariabilityPenalty (healthScore.ts).
+    // Coefficient of variation (CV) averaged for sys and dia; insight at CV > 12%.
+    if sessions.count >= 3 {
+        let systolics = sessions.map { Double($0.systolic) }
+        let diastolics = sessions.map { Double($0.diastolic) }
+        let sysCV = coefficientOfVariation(systolics)
+        let diaCV = coefficientOfVariation(diastolics)
+        let avgCV = (sysCV + diaCV) / 2
+        if avgCV > 12 {
+            insights.append("Your BP readings show high variability. Try measuring at consistent times.")
+        }
     }
 
     // v1 has no activity data (web: confidenceFactor < 1 nudge)
@@ -188,19 +205,12 @@ func bpInsights(sessions: [BPSession]) -> [String] {
         : shown
 }
 
-private func linearSlope(xs: [Double], ys: [Double]) -> Double {
-    let n = Double(xs.count)
-    let meanX = xs.reduce(0, +) / n, meanY = ys.reduce(0, +) / n
-    let num = zip(xs, ys).map { ($0 - meanX) * ($1 - meanY) }.reduce(0, +)
-    let den = xs.map { ($0 - meanX) * ($0 - meanX) }.reduce(0, +)
-    return den == 0 ? 0 : num / den
-}
-
-private func standardDeviation(_ values: [Double]) -> Double {
+private func coefficientOfVariation(_ values: [Double]) -> Double {
     guard values.count > 1 else { return 0 }
     let mean = values.reduce(0, +) / Double(values.count)
+    guard mean != 0 else { return 0 }
     let variance = values.map { ($0 - mean) * ($0 - mean) }.reduce(0, +) / Double(values.count)
-    return variance.squareRoot()
+    return (variance.squareRoot() / mean) * 100
 }
 
 // MARK: - 30-day bars
