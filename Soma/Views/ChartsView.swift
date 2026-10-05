@@ -20,7 +20,13 @@ struct ChartsView: View {
     }
 
     private var filtered: [BPSession] {
-        filterSessions(store.sessions, dateRange: filters.dateRange, timeOfDay: filters.timeOfDay)
+        filterSessions(
+            store.sessions,
+            dateRange: filters.dateRange,
+            timeOfDay: filters.timeOfDay,
+            customStartDate: filters.customStartDate,
+            customEndDate: filters.customEndDate
+        )
             .sorted { $0.date < $1.date } // oldest -> newest for the time axis
     }
 
@@ -29,16 +35,14 @@ struct ChartsView: View {
             VStack(spacing: 0) {
                 BPFilterBar(filters: filters)
 
-                // Segmented switcher (mirrors web TabsList)
-                Picker("", selection: $mode) {
-                    ForEach(ChartMode.allCases) { m in
-                        Text(m.rawValue).tag(m)
+                Picker("Chart Type", selection: $mode) {
+                    ForEach(ChartMode.allCases) { chartMode in
+                        Text(chartMode.rawValue).tag(chartMode)
                     }
                 }
                 .pickerStyle(.segmented)
-                .padding(.horizontal, 60)
+                .padding(.horizontal, 18)
                 .padding(.top, 8)
-                .tint(SomaTheme.rose)
 
                 if filtered.isEmpty {
                     Spacer()
@@ -56,10 +60,13 @@ struct ChartsView: View {
                     .padding(.top, 12)
 
                     HStack(spacing: 8) {
-                        FilterPill(label: "MAP", isOn: showMAP) { showMAP.toggle() }
-                        FilterPill(label: "Trend", isOn: showTrend) { showTrend.toggle() }
-                        FilterPill(label: "Markers", isOn: showMarkers) { showMarkers.toggle() }
+                        Toggle("MAP", isOn: $showMAP)
+                        Toggle("Trend", isOn: $showTrend)
+                        Toggle("Markers", isOn: $showMarkers)
                     }
+                    .toggleStyle(.button)
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
                     .padding(.top, 12)
                     Spacer()
                 } else {

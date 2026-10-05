@@ -11,7 +11,13 @@ struct ReadingsView: View {
     @State private var notesSession: BPSession? = nil
 
     private var filtered: [BPSession] {
-        filterSessions(store.sessions, dateRange: filters.dateRange, timeOfDay: filters.timeOfDay)
+        filterSessions(
+            store.sessions,
+            dateRange: filters.dateRange,
+            timeOfDay: filters.timeOfDay,
+            customStartDate: filters.customStartDate,
+            customEndDate: filters.customEndDate
+        )
     }
 
     var body: some View {

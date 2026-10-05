@@ -16,7 +16,13 @@ struct StatisticsView: View {
     private let mapConfig = ChangeConfig.midpoint(mid: 85, bufferMin: 80, bufferMax: 90)
 
     private var filtered: [BPSession] {
-        filterSessions(store.sessions, dateRange: filters.dateRange, timeOfDay: filters.timeOfDay)
+        filterSessions(
+            store.sessions,
+            dateRange: filters.dateRange,
+            timeOfDay: filters.timeOfDay,
+            customStartDate: filters.customStartDate,
+            customEndDate: filters.customEndDate
+        )
     }
 
     private var previousSessions: [BPSession] {

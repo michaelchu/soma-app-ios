@@ -216,15 +216,19 @@ enum DateRange: String, CaseIterable, Identifiable {
     case month = "1m"
     case quarter = "3m"
     case all = "all"
+    case custom = "custom"
+
+    static let presets: [DateRange] = [.week, .month, .quarter, .all]
 
     var id: String { rawValue }
-    /// Matches the web DateRangeTabs labels: W / M / Q / All
+
     var label: String {
         switch self {
-        case .week: return "W"
-        case .month: return "M"
-        case .quarter: return "Q"
+        case .week: return "7D"
+        case .month: return "1M"
+        case .quarter: return "3M"
         case .all: return "All"
+        case .custom: return "Custom"
         }
     }
 
@@ -240,7 +244,7 @@ enum DateRange: String, CaseIterable, Identifiable {
         case .quarter:
             let d = calendar.date(byAdding: .month, value: -3, to: now)!
             return calendar.startOfDay(for: d)
-        case .all:
+        case .all, .custom:
             return nil
         }
     }
@@ -253,7 +257,7 @@ enum DateRange: String, CaseIterable, Identifiable {
             case .week: return (.day, -7)
             case .month: return (.month, -1)
             case .quarter: return (.month, -3)
-            case .all: return (.day, 0)
+            case .all, .custom: return (.day, 0)
             }
         }()
         guard let prevStart = calendar.date(byAdding: component, value: value, to: start) else { return nil }
@@ -285,16 +289,32 @@ func isValidBloodPressureInput(systolic: String, diastolic: String, pulse: Strin
 }
 
 /// Port of filterReadings (FilterBar.tsx).
-func filterSessions(_ sessions: [BPSession], dateRange: DateRange, timeOfDay: TimeOfDay?) -> [BPSession] {
+func filterSessions(
+    _ sessions: [BPSession],
+    dateRange: DateRange,
+    timeOfDay: TimeOfDay?,
+    customStartDate: Date? = nil,
+    customEndDate: Date? = nil,
+    calendar: Calendar = .current
+) -> [BPSession] {
     var filtered = sessions
-    if let start = dateRange.startDate() {
-        filtered = filtered.filter { s in
-            guard let d = parseDateOnly(s.date) else { return false }
-            return d >= start
+
+    if dateRange == .custom, let customStartDate, let customEndDate {
+        let start = calendar.startOfDay(for: min(customStartDate, customEndDate))
+        let end = calendar.startOfDay(for: max(customStartDate, customEndDate))
+        filtered = filtered.filter { session in
+            guard let date = parseDateOnly(session.date, calendar: calendar) else { return false }
+            return date >= start && date <= end
+        }
+    } else if let start = dateRange.startDate(calendar: calendar) {
+        filtered = filtered.filter { session in
+            guard let date = parseDateOnly(session.date, calendar: calendar) else { return false }
+            return date >= start
         }
     }
-    if let t = timeOfDay {
-        filtered = filtered.filter { $0.timeOfDay == t }
+
+    if let timeOfDay {
+        filtered = filtered.filter { $0.timeOfDay == timeOfDay }
     }
     return filtered
 }
