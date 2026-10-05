@@ -2,7 +2,7 @@ import SwiftUI
 import Charts
 
 // MARK: - Charts tab (mirrors the web ChartsTab: Timeline | Distribution
-// switcher, BPTimeChart with MAP / Trend / Markers toggles)
+// switcher, BPTimeChart with MAP / 7-day average / Markers toggles)
 
 struct ChartsView: View {
     @ObservedObject var store = BPStore.shared
@@ -10,7 +10,7 @@ struct ChartsView: View {
 
     @State private var mode: ChartMode = .timeline
     @State private var showMAP = true // web defaults
-    @State private var showTrendline = true
+    @State private var showRollingAverage = true
     @State private var showMarkers = false
 
     enum ChartMode: String, CaseIterable, Identifiable {
@@ -27,6 +27,8 @@ struct ChartsView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                BPFilterBar(filters: filters)
+
                 // Segmented switcher (mirrors web TabsList)
                 Picker("", selection: $mode) {
                     ForEach(ChartMode.allCases) { m in
@@ -47,16 +49,15 @@ struct ChartsView: View {
                     TimelineChart(
                         sessions: filtered,
                         showMAP: showMAP,
-                        showTrendline: showTrendline,
+                        showRollingAverage: showRollingAverage,
                         showMarkers: showMarkers
                     )
                     .padding(.horizontal, 12)
                     .padding(.top, 12)
 
-                    // Toggle pills (mirror web: MAP / Trend / Markers)
                     HStack(spacing: 8) {
                         FilterPill(label: "MAP", isOn: showMAP) { showMAP.toggle() }
-                        FilterPill(label: "Trend", isOn: showTrendline) { showTrendline.toggle() }
+                        FilterPill(label: "7-day avg", isOn: showRollingAverage) { showRollingAverage.toggle() }
                         FilterPill(label: "Markers", isOn: showMarkers) { showMarkers.toggle() }
                     }
                     .padding(.top, 12)
@@ -84,7 +85,7 @@ struct ChartsView: View {
 struct TimelineChart: View {
     let sessions: [BPSession]
     let showMAP: Bool
-    let showTrendline: Bool
+    let showRollingAverage: Bool
     let showMarkers: Bool
 
     private struct Point: Identifiable {
@@ -119,13 +120,8 @@ struct TimelineChart: View {
                 pts.append(ChartPoint(date: p.date, value: Double(p.map), series: "MAP"))
             }
         }
-        if showTrendline {
-            for t in sysTrend {
-                pts.append(ChartPoint(date: t.date, value: t.value, series: "Sys Trend"))
-            }
-            for t in diaTrend {
-                pts.append(ChartPoint(date: t.date, value: t.value, series: "Dia Trend"))
-            }
+        if showRollingAverage {
+            pts.append(contentsOf: rollingAveragePoints)
         }
         return pts.sorted { $0.date < $1.date }
     }
@@ -139,37 +135,77 @@ struct TimelineChart: View {
         return pts
     }
 
-    /// Linear-regression trendline (matches web: separate regressions for sys and dia,
-    /// x = point index, not timestamp).
-    private var sysTrend: [(date: Date, value: Double)] {
-        linearTrend(values: points.map { Double($0.sys) })
+    private struct DailyAverage {
+        let date: Date
+        let systolic: Double
+        let diastolic: Double
+        let map: Double
     }
 
-    private var diaTrend: [(date: Date, value: Double)] {
-        linearTrend(values: points.map { Double($0.dia) })
+    /// Averages all readings from the same calendar day before calculating the
+    /// trailing window, so days with more measurements don't carry extra weight.
+    private var dailyAverages: [DailyAverage] {
+        let calendar = Calendar.current
+        let readingsByDay = Dictionary(grouping: points) { point in
+            calendar.startOfDay(for: point.date)
+        }
+
+        return readingsByDay.map { date, readings in
+            let count = Double(readings.count)
+            return DailyAverage(
+                date: date,
+                systolic: readings.map { Double($0.sys) }.reduce(0, +) / count,
+                diastolic: readings.map { Double($0.dia) }.reduce(0, +) / count,
+                map: readings.map { Double($0.map) }.reduce(0, +) / count
+            )
+        }
+        .sorted { $0.date < $1.date }
     }
 
-    private func linearTrend(values: [Double]) -> [(date: Date, value: Double)] {
-        let pts = points
-        guard pts.count >= 2, values.count == pts.count else { return [] }
-        let n = Double(pts.count)
-        // Web regresses on point index (0, 1, 2, ...), not on timestamp.
-        let xs = (0..<pts.count).map { Double($0) }
-        let sumX = xs.reduce(0, +), sumY = values.reduce(0, +)
-        let sumXY = zip(xs, values).map(*).reduce(0, +)
-        let sumX2 = xs.map { $0 * $0 }.reduce(0, +)
-        let den = n * sumX2 - sumX * sumX
-        guard den != 0 else { return [] }
-        let slope = (n * sumXY - sumX * sumY) / den
-        let intercept = (sumY - slope * sumX) / n
-        return pts.enumerated().map { (i, p) in (date: p.date, value: slope * Double(i) + intercept) }
+    /// Trailing seven-calendar-day averages. At least three measured days are
+    /// required before a value is shown.
+    private var rollingAveragePoints: [ChartPoint] {
+        let calendar = Calendar.current
+        let daily = dailyAverages
+
+        return daily.flatMap { day -> [ChartPoint] in
+            guard let windowStart = calendar.date(byAdding: .day, value: -6, to: day.date) else {
+                return []
+            }
+            let window = daily.filter { $0.date >= windowStart && $0.date <= day.date }
+            guard window.count >= 3 else { return [] }
+
+            let count = Double(window.count)
+            var averages = [
+                ChartPoint(
+                    date: day.date,
+                    value: window.map(\.systolic).reduce(0, +) / count,
+                    series: "Systolic 7-day average"
+                ),
+                ChartPoint(
+                    date: day.date,
+                    value: window.map(\.diastolic).reduce(0, +) / count,
+                    series: "Diastolic 7-day average"
+                ),
+            ]
+            if showMAP {
+                averages.append(
+                    ChartPoint(
+                        date: day.date,
+                        value: window.map(\.map).reduce(0, +) / count,
+                        series: "MAP 7-day average"
+                    )
+                )
+            }
+            return averages
+        }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 16) {
-                legendDot(SomaTheme.systolic, "Systolic")
-                legendDot(SomaTheme.diastolic, "Diastolic")
+                legendDot(SomaTheme.systolic.opacity(showRollingAverage ? 0.3 : 1), "Systolic")
+                legendDot(SomaTheme.diastolic.opacity(showRollingAverage ? 0.3 : 1), "Diastolic")
             }
             .font(SomaFont.regular(12))
             .foregroundColor(SomaTheme.muted)
@@ -196,11 +232,12 @@ struct TimelineChart: View {
                 }
             }
             .chartForegroundStyleScale([
-                "Systolic": SomaTheme.systolic,
-                "Diastolic": SomaTheme.diastolic,
-                "MAP": SomaTheme.slate,
-                "Sys Trend": SomaTheme.systolic.opacity(0.45),
-                "Dia Trend": SomaTheme.diastolic.opacity(0.45),
+                "Systolic": SomaTheme.systolic.opacity(showRollingAverage ? 0.3 : 1),
+                "Diastolic": SomaTheme.diastolic.opacity(showRollingAverage ? 0.3 : 1),
+                "MAP": SomaTheme.slate.opacity(showRollingAverage ? 0.3 : 1),
+                "Systolic 7-day average": SomaTheme.systolic,
+                "Diastolic 7-day average": SomaTheme.diastolic,
+                "MAP 7-day average": SomaTheme.slate,
             ])
             .chartXAxis {
                 AxisMarks(values: .automatic(desiredCount: 4)) { _ in
@@ -241,9 +278,11 @@ struct TimelineChart: View {
     private func lineStyle(for series: String) -> StrokeStyle {
         switch series {
         case "MAP":
-            return StrokeStyle(lineWidth: 1.5, dash: [5, 4])
-        case "Sys Trend", "Dia Trend":
-            return StrokeStyle(lineWidth: 1, dash: [3, 4])
+            return StrokeStyle(lineWidth: showRollingAverage ? 1 : 1.5, dash: [5, 4])
+        case "Systolic 7-day average", "Diastolic 7-day average", "MAP 7-day average":
+            return StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round)
+        case "Systolic", "Diastolic":
+            return StrokeStyle(lineWidth: showRollingAverage ? 1.25 : 2)
         default:
             return StrokeStyle(lineWidth: 2)
         }
@@ -259,8 +298,8 @@ struct DistributionChart: View {
         VStack(alignment: .leading, spacing: 8) {
             Chart(sessions) { s in
                 PointMark(
-                    x: .value("Systolic", s.systolic),
-                    y: .value("Diastolic", s.diastolic)
+                    x: .value("Diastolic", s.diastolic),
+                    y: .value("Systolic", s.systolic)
                 )
                 .foregroundStyle(categoryColor(s.category))
                 .symbolSize(60)
@@ -304,14 +343,14 @@ struct DistributionChart: View {
     }
 
     private var xDomain: ClosedRange<Int> {
-        let vals = sessions.map(\.systolic)
-        guard let lo = vals.min(), let hi = vals.max() else { return 90...140 }
+        let vals = sessions.map(\.diastolic)
+        guard let lo = vals.min(), let hi = vals.max() else { return 60...100 }
         return (lo - 5)...(hi + 5)
     }
 
     private var yDomain: ClosedRange<Int> {
-        let vals = sessions.map(\.diastolic)
-        guard let lo = vals.min(), let hi = vals.max() else { return 60...100 }
+        let vals = sessions.map(\.systolic)
+        guard let lo = vals.min(), let hi = vals.max() else { return 90...140 }
         return (lo - 5)...(hi + 5)
     }
 

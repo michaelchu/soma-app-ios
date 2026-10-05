@@ -17,32 +17,7 @@ struct ReadingsView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // FilterBar (web: DateRangeTabs W/M/Q/All + time-of-day select)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(DateRange.allCases) { range in
-                            FilterPill(label: range.label, isOn: filters.dateRange == range) {
-                                filters.dateRange = range
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 18)
-                }
-                .padding(.top, 4)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        FilterPill(label: "Any Time", isOn: filters.timeOfDay == nil) {
-                            filters.timeOfDay = nil
-                        }
-                        ForEach(TimeOfDay.allCases) { t in
-                            FilterPill(label: t.shortLabel, isOn: filters.timeOfDay == t) {
-                                filters.timeOfDay = t
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 18)
-                }
-                .padding(.top, 8)
+                BPFilterBar(filters: filters)
 
                 if store.isLoading && store.sessions.isEmpty {
                     Spacer()

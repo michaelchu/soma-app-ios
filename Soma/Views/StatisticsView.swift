@@ -31,8 +31,12 @@ struct StatisticsView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
+            VStack(spacing: 0) {
+                BPFilterBar(filters: filters)
+                    .padding(.bottom, 12)
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
                     if let stats = calculateFullStats(sessions: filtered) {
                         // Average BP header
                         HStack(alignment: .top) {
@@ -137,9 +141,10 @@ struct StatisticsView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.top, 60)
                     }
-                    Spacer(minLength: 24)
+                        Spacer(minLength: 24)
+                    }
+                    .padding(.horizontal, 18)
                 }
-                .padding(.horizontal, 18)
             }
             .background(SomaTheme.background)
             .navigationTitle("Statistics")
