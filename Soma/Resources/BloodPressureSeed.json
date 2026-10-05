@@ -1,0 +1,1458 @@
+{
+  "readings": [
+    {
+      "date": "2026-10-03",
+      "diastolic": 78,
+      "id": "9db8e38a-a376-4b5f-9be3-190368f1991f",
+      "pulse": 96,
+      "systolic": 97,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-10-01",
+      "diastolic": 83,
+      "id": "9a230a12-dcd1-4781-9a54-01be2e83bdf4",
+      "pulse": 71,
+      "systolic": 109,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-09-28",
+      "diastolic": 78,
+      "id": "3410a35c-744a-4353-bf9c-cf9b620e673f",
+      "pulse": 77,
+      "systolic": 108,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-09-24",
+      "diastolic": 85,
+      "id": "8a2a95d4dd5b46fbad651f20d66ee12e",
+      "pulse": 81,
+      "systolic": 109,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-09-18",
+      "diastolic": 85,
+      "id": "c1a4d83ac9c54967b82a2bf1e385b08b",
+      "pulse": 77,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-09-16",
+      "diastolic": 87,
+      "id": "4f36f02d4b924c68b7a0799b991c6e11",
+      "pulse": 83,
+      "systolic": 116,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-09-09",
+      "diastolic": 84,
+      "id": "a00548697e784f4fbee390b4b2a415d1",
+      "pulse": 86,
+      "systolic": 105,
+      "timeOfDay": "evening"
+    },
+    {
+      "date": "2026-08-14",
+      "diastolic": 84,
+      "id": "1a50861cb14a4244bd16bad05689f0d0",
+      "pulse": 76,
+      "systolic": 106,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-07-31",
+      "diastolic": 82,
+      "id": "d5dcb01e75eb4608870fc7f9240adf20",
+      "pulse": 68,
+      "systolic": 112,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-07-27",
+      "diastolic": 86,
+      "id": "ade7b84894be4ba398955792f74573cd",
+      "pulse": 66,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-07-24",
+      "diastolic": 80,
+      "id": "4f3793d58c544be3ac3824b3ee14538d",
+      "pulse": 79,
+      "systolic": 118,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-07-22",
+      "diastolic": 85,
+      "id": "f271138635ef43e889320e7b5b0e27c7",
+      "pulse": 77,
+      "systolic": 110,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-07-21",
+      "diastolic": 86,
+      "id": "eea1d488fe9a419d865883a80dcfeee1",
+      "pulse": 91,
+      "systolic": 111,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-07-04",
+      "diastolic": 79,
+      "id": "2a45c91111e04cd8a2d0841027b988a8",
+      "pulse": 79,
+      "systolic": 112,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-06-28",
+      "diastolic": 82,
+      "id": "427d042a7f134315a58c7e491014995a",
+      "pulse": 75,
+      "systolic": 106,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-06-20",
+      "diastolic": 76,
+      "id": "2830335508e84d1d8cc0aea8e0718112",
+      "pulse": 81,
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-06-13",
+      "diastolic": 80,
+      "id": "59bf14a286374a3d8ff15510024d16",
+      "pulse": 78,
+      "systolic": 112,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-06-11",
+      "diastolic": 73,
+      "id": "1c9d7066dc254129b786ff2b9c562821",
+      "pulse": 91,
+      "systolic": 107,
+      "timeOfDay": "evening"
+    },
+    {
+      "date": "2026-06-09",
+      "diastolic": 77,
+      "id": "fc0dab73005a4b1d81753181ecaaeeea",
+      "pulse": 79,
+      "systolic": 106,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-06-05",
+      "diastolic": 75,
+      "id": "e85d1734b603457cbaf634f0e39f9f59",
+      "pulse": 77,
+      "systolic": 110,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-06-01",
+      "diastolic": 84,
+      "id": "6b77ae61300146738fb699466824e58e",
+      "pulse": 74,
+      "systolic": 115,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-05-29",
+      "diastolic": 80,
+      "id": "63b894fe4ec2420da00fb3a1c43fdae9",
+      "pulse": 70,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-05-26",
+      "diastolic": 83,
+      "id": "1c4919a42e0f4f8cbb4163e261c3db4a",
+      "pulse": 78,
+      "systolic": 115,
+      "timeOfDay": "evening"
+    },
+    {
+      "date": "2026-05-23",
+      "diastolic": 77,
+      "id": "19bd179d8ee449db90d68bff609761e6",
+      "pulse": 80,
+      "systolic": 110,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-05-21",
+      "diastolic": 85,
+      "id": "7a159b83539d4d10932ef45510bdc16b",
+      "pulse": 73,
+      "systolic": 114,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-05-15",
+      "diastolic": 83,
+      "id": "b3a16f23aaa64bf4b13ea00d46338453",
+      "pulse": 76,
+      "systolic": 105,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-05-14",
+      "diastolic": 88,
+      "id": "6c1a37bda8e649c98e8763efb1653c6c",
+      "pulse": 77,
+      "systolic": 118,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-05-10",
+      "diastolic": 82,
+      "id": "3c0eb167865c4798a686425ad8faae9c",
+      "pulse": 82,
+      "systolic": 114,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-05-08",
+      "diastolic": 79,
+      "id": "8c6d9c077c5f4460b5b3daa64c6681a2",
+      "pulse": 89,
+      "systolic": 109,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-05-02",
+      "diastolic": 80,
+      "id": "85a45967e26f4487b10e338073b7d285",
+      "pulse": 95,
+      "systolic": 117,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-04-24",
+      "diastolic": 82,
+      "id": "d40749a7e7514323ab61a44e29756b1e",
+      "pulse": 76,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-04-23",
+      "diastolic": 81,
+      "id": "94462e82821e418dbb080a90b43824e8",
+      "pulse": 80,
+      "systolic": 107,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-04-20",
+      "diastolic": 80,
+      "id": "c3069a91aaa347168954d5d331c6a1ac",
+      "pulse": 72,
+      "systolic": 107,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-04-16",
+      "diastolic": 76,
+      "id": "941e0a10cb2444b68866d081115a3f50",
+      "pulse": 87,
+      "systolic": 113,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-04-11",
+      "diastolic": 79,
+      "id": "c4cd0dbb71e34c4e844753b8f30271cd",
+      "pulse": 80,
+      "systolic": 112,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-03-20",
+      "diastolic": 79,
+      "id": "d456026e72554556be61880a46d30e26",
+      "pulse": 75,
+      "systolic": 115,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-03-12",
+      "diastolic": 83,
+      "id": "c9fcac09f2284ea8862990f0a55c305a",
+      "pulse": 74,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-03-11",
+      "diastolic": 82,
+      "id": "1f1d6d8b4b0045918c7b2ca7451583cf",
+      "pulse": 88,
+      "systolic": 115,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-03-10",
+      "diastolic": 76,
+      "id": "c74e5e2d77ec4d1c8e662a1802b9feaf",
+      "pulse": 74,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-03-05",
+      "diastolic": 79,
+      "id": "230decbf8ee24154864d7bd2e36a4844",
+      "pulse": 87,
+      "systolic": 106,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-02-25",
+      "diastolic": 82,
+      "id": "bd4c828399e941e4a1b8ea979bcbfdf5",
+      "pulse": 76,
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-02-17",
+      "diastolic": 81,
+      "id": "39fc80441e4d4533a47af5fb49b5b86e",
+      "pulse": 80,
+      "systolic": 115,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-02-09",
+      "diastolic": 82,
+      "id": "74db921082bd48bbb7f8f8a2fb0da8f9",
+      "pulse": 77,
+      "systolic": 106,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-02-05",
+      "diastolic": 83,
+      "id": "f3e6178b2f1349ddb609557aa8f07f1d",
+      "pulse": 79,
+      "systolic": 109,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-02-02",
+      "diastolic": 81,
+      "id": "bfe4e967435b4bc187fdf03032b6fb07",
+      "pulse": 67,
+      "systolic": 107,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-02-01",
+      "diastolic": 87,
+      "id": "25e819ab1e2c4eff9f641f084a373ea4",
+      "pulse": 105,
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-30",
+      "diastolic": 86,
+      "id": "bfd0def02a5343cda0f323e16410badd",
+      "pulse": 70,
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-29",
+      "diastolic": 78,
+      "id": "d90e568cc66446db8642a79a560ab040",
+      "pulse": 67,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-28",
+      "diastolic": 84,
+      "id": "ff78fb5d032e4f549aae839c50a4c450",
+      "pulse": 74,
+      "systolic": 115,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-27",
+      "diastolic": 82,
+      "id": "27c5e99bf8ce4c74b444f61123eef359",
+      "pulse": 77,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-26",
+      "diastolic": 85,
+      "id": "ca4993802b2345e3921567fdd4b2fca6",
+      "pulse": 75,
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-23",
+      "diastolic": 86,
+      "id": "9ba16379310b44b79f493ecbb9efa390",
+      "pulse": 70,
+      "systolic": 118,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-01-22",
+      "diastolic": 82,
+      "id": "cb03e2bb4ea74484a97c72da3dfc8363",
+      "systolic": 110,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-21",
+      "diastolic": 88,
+      "id": "38c5a897a72c4192a6915bf9280e2790",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-19",
+      "diastolic": 87,
+      "id": "96ea046a0d8b4fca86f6d292a9d9615a",
+      "systolic": 123,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2026-01-05",
+      "diastolic": 95,
+      "id": "8ca9009f4af34b5c88220ae04fa6c075",
+      "systolic": 118,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-01-03",
+      "diastolic": 85,
+      "id": "5353f0efb8524fd287b762b66fa0b508",
+      "systolic": 118,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2026-01-02",
+      "diastolic": 90,
+      "id": "0a8bc51ea9274c1ba6974092beb6a9ef",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-12-27",
+      "diastolic": 82,
+      "id": "bcd88e38555d4351b2fd1f4a54a80957",
+      "systolic": 116,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-12-18",
+      "diastolic": 85,
+      "id": "2d1da172424e4c839a41605d67e1c2b9",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-12-16",
+      "diastolic": 83,
+      "id": "75070bc28d9f439d8f5de131d487d75f",
+      "systolic": 108,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-12-15",
+      "diastolic": 86,
+      "id": "75481fa47d1843f292e65c18bab23309",
+      "systolic": 118,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-12-12",
+      "diastolic": 90,
+      "id": "b67902f6813149c984a6c1f56bc25037",
+      "systolic": 121,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-12-03",
+      "diastolic": 82,
+      "id": "9b9f166ea3744ea4b288bb565862a22b",
+      "systolic": 111,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-12-01",
+      "diastolic": 88,
+      "id": "3a087207366b408faa8e97fdb70de72f",
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-11-07",
+      "diastolic": 90,
+      "id": "27b44e78bee04eff89c23c462fcf63dd",
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-11-01",
+      "diastolic": 85,
+      "id": "c306f317b394437384806af8c8b5aea5",
+      "systolic": 106,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-10-30",
+      "diastolic": 89,
+      "id": "4f73827c3910410db1ffc9bfc6a95dd6",
+      "systolic": 116,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-10-19",
+      "diastolic": 83,
+      "id": "4277ec9c1c3649c3a7cc673963513103",
+      "systolic": 115,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-10-17",
+      "diastolic": 78,
+      "id": "b079b9160c02446dbb0a3108e026c6c5",
+      "systolic": 115,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-10-16",
+      "diastolic": 84,
+      "id": "461a8e9cdf7a41af9b62cd7a68d97028",
+      "systolic": 112,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-10-12",
+      "diastolic": 87,
+      "id": "ca1dac99ac31409f82428fdd8a936e76",
+      "systolic": 115,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-10-11",
+      "diastolic": 84,
+      "id": "99125af713e74119bb4ac242fcb5702e",
+      "systolic": 115,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-10-10",
+      "diastolic": 86,
+      "id": "a616252615e54d99af082acb78c8b302",
+      "systolic": 118,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-10-09",
+      "diastolic": 83,
+      "id": "0952c986eaae473ea2d58d2a07523f6e",
+      "systolic": 109,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-10-08",
+      "diastolic": 81,
+      "id": "212a17e1bc59481c97f5365f15e3543a",
+      "systolic": 108,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-10-07",
+      "diastolic": 81,
+      "id": "033be34a5e0644f6b69e2c32034c0293",
+      "systolic": 108,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-10-06",
+      "diastolic": 81,
+      "id": "d3082222959249a79f55fabcd2650a84",
+      "systolic": 108,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-10-03",
+      "diastolic": 83,
+      "id": "361a4a5e7eff4e34bd3816763c16939e",
+      "systolic": 114,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-10-01",
+      "diastolic": 82,
+      "id": "40e99bc09d1643ca9148464221ae8b1f",
+      "systolic": 108,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-29",
+      "diastolic": 83,
+      "id": "b658f870d0b94157957035b0fe0eae27",
+      "systolic": 112,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-28",
+      "diastolic": 85,
+      "id": "3d63ba1bb272440282fdcb6da9b361e4",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-26",
+      "diastolic": 81,
+      "id": "b9dc707fb1784a6d9dbeed71e89d540f",
+      "systolic": 109,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-09-22",
+      "diastolic": 89,
+      "id": "512d4fd0a56043ca99cc0d2371a88060",
+      "systolic": 122,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-09-21",
+      "diastolic": 71,
+      "id": "801c62c4c1934842b1702aa5b4ceb6e8",
+      "systolic": 100,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-09-18",
+      "diastolic": 88,
+      "id": "2e2d2fd1edff413da4359ac4480ff306",
+      "systolic": 114,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-15",
+      "diastolic": 89,
+      "id": "e46f9a96ccd146d4af64fa3531bd75b5",
+      "systolic": 119,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-12",
+      "diastolic": 90,
+      "id": "f188a9637d7844b1b6f6ddea5f20ffb6",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-11",
+      "diastolic": 88,
+      "id": "ee415c71b06d41dabec08840cda95b02",
+      "systolic": 108,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-04",
+      "diastolic": 90,
+      "id": "37e2134a17c94a7c857a30ae2aa93a55",
+      "systolic": 125,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-03",
+      "diastolic": 90,
+      "id": "b25f252b5f8e444aaa4df99b8677a081",
+      "systolic": 115,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-02",
+      "diastolic": 82,
+      "id": "a4f1c7831cce413aaea4bea81136471f",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-09-01",
+      "diastolic": 84,
+      "id": "e4372e822de9491687d250f6c97c538a",
+      "systolic": 124,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-08-31",
+      "diastolic": 86,
+      "id": "eb093407c7cf44e0a83c52fa4ef4ddde",
+      "systolic": 122,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-08-30",
+      "diastolic": 85,
+      "id": "7b193939dc974a4ba1c011e79182d5cb",
+      "systolic": 114,
+      "timeOfDay": "evening"
+    },
+    {
+      "date": "2025-08-19",
+      "diastolic": 90,
+      "id": "531d7c4826b34cdf92e6668d5b7687ec",
+      "systolic": 125,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-08-17",
+      "diastolic": 87,
+      "id": "0a2071394e9a4189b9d7775f235fabc5",
+      "systolic": 125,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-08-14",
+      "diastolic": 95,
+      "id": "f5fda5b6b058432ba822fdc2a0e4ecb4",
+      "systolic": 126,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-08-03",
+      "diastolic": 91,
+      "id": "092450a284734075bdc4ef482677d4a8",
+      "systolic": 113,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-07-26",
+      "diastolic": 86,
+      "id": "592b9f78106e4a94a9bb2af84b96c5be",
+      "systolic": 121,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-07-19",
+      "diastolic": 83,
+      "id": "a67fcf729b8c46458505a7f92932dfe6",
+      "systolic": 114,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-07-17",
+      "diastolic": 84,
+      "id": "de76ecec84d74672a4803c99a452fec2",
+      "systolic": 118,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-07-14",
+      "diastolic": 86,
+      "id": "a5ae54f1a3e94e1a8de72b89fb139fc7",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-07-13",
+      "diastolic": 82,
+      "id": "829461ad7cb14ba797e330093b27e410",
+      "systolic": 110,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-07-12",
+      "diastolic": 88,
+      "id": "a4e755b354824f7583e54f87b5ddf066",
+      "systolic": 125,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-07-11",
+      "diastolic": 87,
+      "id": "69979f5093c44bf5afb52a070431e94c",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-07-04",
+      "diastolic": 84,
+      "id": "60b8adc5a7e3419bb0b10826c655593c",
+      "systolic": 119,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-06-21",
+      "diastolic": 84,
+      "id": "f8ed73aa5d4547c3a9c99d32815dbd3d",
+      "systolic": 107,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-06-19",
+      "diastolic": 84,
+      "id": "d1e199b2b2384fe69d05849b940c2bf3",
+      "systolic": 109,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-06-18",
+      "diastolic": 91,
+      "id": "8776a1ab6cf2400b9a46ab1567665968",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-06-16",
+      "diastolic": 88,
+      "id": "d8a784389ac34897b80f40c604f9c3c2",
+      "systolic": 126,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-06-13",
+      "diastolic": 85,
+      "id": "52404575fd5a44d7beffbfdaafb3bb30",
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-06-11",
+      "diastolic": 88,
+      "id": "4c99ed96364f4892be92f47c0a931020",
+      "systolic": 126,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-06-06",
+      "diastolic": 90,
+      "id": "df790c317cc34d62a5d7f05240db63d1",
+      "systolic": 118,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-06-05",
+      "diastolic": 85,
+      "id": "e7a9f705ee9148a8b68cfc4bb9486428",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-06-02",
+      "diastolic": 93,
+      "id": "4673439882ac458ca96ccf9f49bfbcfd",
+      "systolic": 123,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-05-27",
+      "diastolic": 82,
+      "id": "42d1919ffaee49d1b15d5b6c486be27a",
+      "systolic": 116,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-05-25",
+      "diastolic": 85,
+      "id": "b27e97d3c6b042afb1e8e025227bb73b",
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-05-24",
+      "diastolic": 85,
+      "id": "54fbc24cab48434d89689814962856b2",
+      "systolic": 119,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-04-17",
+      "diastolic": 81,
+      "id": "0810f4e5aaac40269a6d06db710d40b9",
+      "systolic": 127,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-04-15",
+      "diastolic": 82,
+      "id": "99c105691f064949bf944b6d1dbe1437",
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-04-11",
+      "diastolic": 86,
+      "id": "98cbebbaeda8445f8df0b66169297f6b",
+      "systolic": 119,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-04-02",
+      "diastolic": 85,
+      "id": "7200b43f10034b55875d903c01d6b504",
+      "systolic": 122,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-03-16",
+      "diastolic": 84,
+      "id": "60530e5626ed4ae29be61050eec7377a",
+      "systolic": 118,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-03-12",
+      "diastolic": 81,
+      "id": "06bc9d48317e4b8daa6575c4ede6b12a",
+      "systolic": 122,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-03-04",
+      "diastolic": 80,
+      "id": "afec625bfd97491f8f4dcac4de1a14c7",
+      "systolic": 120,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-02-27",
+      "diastolic": 90,
+      "id": "c262e8ab64ab4a4393267d070d008c5f",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-02-23",
+      "diastolic": 86,
+      "id": "f788fae2e4674dd790cf03d6c8b34b12",
+      "systolic": 119,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-02-12",
+      "diastolic": 85,
+      "id": "59266223ca5d41368f7c746756bd87d0",
+      "systolic": 122,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-02-05",
+      "diastolic": 85,
+      "id": "f173f957442b44cf8adbd4cd6b5ef941",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-02-04",
+      "diastolic": 83,
+      "id": "7346a6c5b2864b3190ed508438ea1110",
+      "systolic": 123,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-02-02",
+      "diastolic": 84,
+      "id": "0a954688604e4d0bb6d3da405095556a",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-27",
+      "diastolic": 83,
+      "id": "e4023ebd71254252a4ee6d82e67245b8",
+      "systolic": 125,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-23",
+      "diastolic": 85,
+      "id": "5c60415ad61c4b61bed853422dc962c9",
+      "systolic": 116,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-22",
+      "diastolic": 82,
+      "id": "7981a08a2b874d7584efd1b0613fe67f",
+      "systolic": 125,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-17",
+      "diastolic": 85,
+      "id": "6484d475beca40399c64babf193e1159",
+      "systolic": 121,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-16",
+      "diastolic": 78,
+      "id": "c91f455438ec4fd3af9011b815664db6",
+      "systolic": 116,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-14",
+      "diastolic": 84,
+      "id": "d8f1b6a2026142ee8d932e07ff6eeacc",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-09",
+      "diastolic": 81,
+      "id": "9050e5b7f12c4265831ea32376e830fd",
+      "systolic": 118,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-01-08",
+      "diastolic": 83,
+      "id": "28378cb0bd3445619146ba1212fc3b49",
+      "systolic": 124,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-01-07",
+      "diastolic": 74,
+      "id": "17f9b5134b8343f0b602b927780091ad",
+      "systolic": 105,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-06",
+      "diastolic": 79,
+      "id": "681bd068b24149f7a79a2dab847b2558",
+      "systolic": 112,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-01-04",
+      "diastolic": 84,
+      "id": "48ca666097c9498b8eb5772f6d0eb56f",
+      "systolic": 124,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-01-03",
+      "diastolic": 71,
+      "id": "9c95958e7e694f9d814723f3ca46910d",
+      "systolic": 101,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2025-01-02",
+      "diastolic": 80,
+      "id": "14a52334e3fb4f47ae11f515b09173cf",
+      "systolic": 109,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2025-01-01",
+      "diastolic": 84,
+      "id": "db013bc35c024b46a9a6a4d5b0eaf6ee",
+      "systolic": 114,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-30",
+      "diastolic": 90,
+      "id": "e955460780034d6da1eba87b2d6d1b59",
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-25",
+      "diastolic": 80,
+      "id": "48caf128b6854f38a30a1ac2d249d894",
+      "systolic": 110,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-12-24",
+      "diastolic": 78,
+      "id": "da1ec7ac599c47fc82cd70568bb89214",
+      "systolic": 115,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-23",
+      "diastolic": 81,
+      "id": "34a41c52cfa842859ec65875241be385",
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-22",
+      "diastolic": 81,
+      "id": "6f76397e7a9a428a8c457b7c995089bf",
+      "systolic": 107,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-21",
+      "diastolic": 80,
+      "id": "be4dd33d26ff4a9ca0e5a778f8ee2cf3",
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-20",
+      "diastolic": 87,
+      "id": "136aac148b0b4d218752bc4005dcea32",
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-19",
+      "diastolic": 87,
+      "id": "85154ee68e0c49de810c7c6bce9f94c1",
+      "systolic": 128,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-12-17",
+      "diastolic": 82,
+      "id": "285e1af4e33c4f8c9acbe65f306263af",
+      "systolic": 114,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-16",
+      "diastolic": 87,
+      "id": "92c976cbd84e4d93952c57eced0fc384",
+      "systolic": 122,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-14",
+      "diastolic": 87,
+      "id": "dc110ca610bf473c9bbd233b5869bc7a",
+      "systolic": 122,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-12-13",
+      "diastolic": 84,
+      "id": "f646d306a6c2456482028abd602eb077",
+      "systolic": 119,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-11",
+      "diastolic": 82,
+      "id": "544a5c3654cb44f682ba92cf87235066",
+      "systolic": 119,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-12-10",
+      "diastolic": 93,
+      "id": "81b8252aa4d3403bb5d9d3d8b906e0c7",
+      "systolic": 126,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-08",
+      "diastolic": 88,
+      "id": "1ceefca3c21c44c2a9825cbc5bfcd7ea",
+      "systolic": 125,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-12-05",
+      "diastolic": 85,
+      "id": "da3d709ce3a141e7acccd9f470ac8d7e",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-02",
+      "diastolic": 86,
+      "id": "82ac34b37c9140c4a53e2a8d84a66898",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-12-01",
+      "diastolic": 88,
+      "id": "922888a29a41493992f8fcf2b43d126e",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-11-29",
+      "diastolic": 88,
+      "id": "d39774b16a754a59ac9e87aed4c392be",
+      "systolic": 122,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-11-27",
+      "diastolic": 79,
+      "id": "8c148c2e230d40bdb9b67d6fb9018329",
+      "systolic": 115,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-11-26",
+      "diastolic": 75,
+      "id": "ee5ab7e14c8b4fc281767dfa9b2762bd",
+      "systolic": 113,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-11-23",
+      "diastolic": 89,
+      "id": "b2e65e5126ed462aa6fadc517ded2ac4",
+      "systolic": 128,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-11-22",
+      "diastolic": 78,
+      "id": "390ff7118c24444eb7d757302d1c0744",
+      "systolic": 111,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-11-21",
+      "diastolic": 83,
+      "id": "8f83846a9c974793b36e7dabec59a6a6",
+      "systolic": 117,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-11-20",
+      "diastolic": 83,
+      "id": "f3d65798db1940a7b2b6ad616ea4e343",
+      "systolic": 117,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-11-19",
+      "diastolic": 90,
+      "id": "92701aa6264c413ca66903d486d68181",
+      "systolic": 120,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-11-14",
+      "diastolic": 80,
+      "id": "f955ee7db84647a5869bb30b5b0bbf17",
+      "systolic": 117,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-11-08",
+      "diastolic": 87,
+      "id": "882609cd698540edb76bf4e796b73e0d",
+      "systolic": 119,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-11-06",
+      "diastolic": 89,
+      "id": "75e67004dc4247e091d3feb3addae1c4",
+      "systolic": 118,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-11-02",
+      "diastolic": 89,
+      "id": "cfe5731a820044b297578599cd66afa2",
+      "systolic": 125,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-31",
+      "diastolic": 87,
+      "id": "9ac18d50c2e945299032b92547df0ac6",
+      "systolic": 123,
+      "timeOfDay": "evening"
+    },
+    {
+      "date": "2024-10-30",
+      "diastolic": 89,
+      "id": "8553e2d8c22d42abb72050a499a9769b",
+      "systolic": 118,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-28",
+      "diastolic": 85,
+      "id": "8273c8082927499395eda21938b0328d",
+      "systolic": 118,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-25",
+      "diastolic": 84,
+      "id": "eaef1d329dbc42b5ad31cee533cc724b",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-24",
+      "diastolic": 86,
+      "id": "dce0c94109c447579f99ef128f4c616f",
+      "systolic": 124,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-23",
+      "diastolic": 85,
+      "id": "eea966e1ca684fe8848d5666edf19de2",
+      "systolic": 114,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-21",
+      "diastolic": 80,
+      "id": "a221a6c258ea403aac0541e02fc7f48d",
+      "systolic": 112,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-20",
+      "diastolic": 83,
+      "id": "4e920a1eed2c4d0a85e78370d51a2067",
+      "systolic": 119,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-19",
+      "diastolic": 93,
+      "id": "4df619eb9d8f4453bb4a8fdebb310f98",
+      "systolic": 124,
+      "timeOfDay": "afternoon"
+    },
+    {
+      "date": "2024-10-18",
+      "diastolic": 97,
+      "id": "ab52571a3d7a42459372051e8a042f38",
+      "systolic": 131,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-17",
+      "diastolic": 93,
+      "id": "5c77869e781c4c12b07e2caf6a4ff6c8",
+      "systolic": 128,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-11",
+      "diastolic": 85,
+      "id": "d2e8067da5b045a5918bac0c6121587d",
+      "systolic": 116,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-10",
+      "diastolic": 90,
+      "id": "96d4cb780bb048108c3c24709f894f55",
+      "systolic": 122,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-07",
+      "diastolic": 86,
+      "id": "dd114cef94d347cdb6a96ebdbfe9a3d2",
+      "systolic": 118,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-05",
+      "diastolic": 90,
+      "id": "cfc48cc0956b4b06a3c282b2cf3a00d1",
+      "systolic": 116,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-03",
+      "diastolic": 93,
+      "id": "a15ce3e665bf443683df68b34fa6d871",
+      "systolic": 124,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-10-01",
+      "diastolic": 83,
+      "id": "200fdb0fb7bf4c7abdf56073a559a53d",
+      "systolic": 121,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-09-30",
+      "diastolic": 85,
+      "id": "1140dd4c595845cabb35a701ff981248",
+      "systolic": 123,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-09-28",
+      "diastolic": 85,
+      "id": "2b7fb0cfa90f4ad387f747aeb19ffb5e",
+      "systolic": 113,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-09-27",
+      "diastolic": 96,
+      "id": "1c7e96b2430f49029f55229c0f07a648",
+      "systolic": 124,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-09-26",
+      "diastolic": 90,
+      "id": "8abb72d48f6d4c39adaf07c3c773dd94",
+      "systolic": 126,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-09-25",
+      "diastolic": 94,
+      "id": "7e770ff75f2341fc9b3bf70007ea0da1",
+      "systolic": 118,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-09-24",
+      "diastolic": 89,
+      "id": "86f13194ab7742989c80fcc410bbb0cd",
+      "systolic": 120,
+      "timeOfDay": "morning"
+    },
+    {
+      "date": "2024-09-23",
+      "diastolic": 93,
+      "id": "f9720ffee1a443a1804e8b8ec662558c",
+      "systolic": 126,
+      "timeOfDay": "morning"
+    }
+  ],
+  "source": "Vercel averaged blood-pressure sessions",
+  "version": 1
+}

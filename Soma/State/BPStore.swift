@@ -14,14 +14,24 @@ protocol SomaAPIClientProtocol {
 }
 
 protocol HealthKitManagerProtocol {
-    func saveReading(systolic: Int, diastolic: Int, pulse: Int?, date: Date) async throws
+    func saveReading(
+        systolic: Int,
+        diastolic: Int,
+        pulse: Int?,
+        date: Date,
+        syncIdentifier: String?,
+        notes: String?,
+        arm: Arm?
+    ) async throws
     func fetchBloodPressureSamples(daysBack: Int) async throws -> [HealthSampleReading]
+    func deleteBloodPressureSample(id: String) async throws
+    func deleteAllSomaHealthSamples() async throws -> Int
 }
 
 extension SomaAPIClient: SomaAPIClientProtocol {}
 extension HealthKitManager: HealthKitManagerProtocol {}
 
-// MARK: - Central BP state (mirrors the web BPContext / useReadings hook)
+// MARK: - Apple Health-backed blood pressure state
 
 @MainActor
 final class BPStore: ObservableObject {
@@ -33,38 +43,31 @@ final class BPStore: ObservableObject {
 
     private let api: any SomaAPIClientProtocol
     private let healthKit: any HealthKitManagerProtocol
-    private let defaults: UserDefaults
 
+    // Vercel is retained only for the one-time HealthKit migration repair.
     init(
         api: any SomaAPIClientProtocol = SomaAPIClient.shared,
         healthKit: any HealthKitManagerProtocol = HealthKitManager.shared,
         defaults: UserDefaults = .standard
     ) {
         self.api = api
+        _ = defaults
         self.healthKit = healthKit
-        self.defaults = defaults
     }
 
-    var isConfigured: Bool { api.isConfigured }
-
-    // MARK: - Load
-
     func load() async {
-        guard api.isConfigured else { return }
         isLoading = true
         errorMessage = nil
+        defer { isLoading = false }
+
         do {
-            let rows = try await api.fetchBloodPressureRows()
-            sessions = groupRowsIntoSessions(rows)
+            let samples = try await healthKit.fetchBloodPressureSamples(daysBack: 3650)
+            sessions = samples.map(Self.session(from:))
         } catch {
             errorMessage = error.localizedDescription
         }
-        isLoading = false
     }
 
-    // MARK: - Create (quick log)
-
-    /// Logs a new session to Soma, then writes it to HealthKit (two-way sync).
     @discardableResult
     func addSession(
         date: Date,
@@ -75,24 +78,18 @@ final class BPStore: ObservableObject {
         arm: Arm?,
         notes: String?
     ) async -> Bool {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd"
-        let dateString = df.string(from: date)
+        errorMessage = nil
         do {
-            let sessionId = try await api.createSession(
-                date: dateString,
-                timeOfDay: timeOfDay,
-                readings: [.init(systolic: systolic, diastolic: diastolic, pulse: pulse, arm: arm)],
-                notes: (notes?.isEmpty ?? true) ? nil : notes
-            )
-            // Write to HealthKit (best effort — Soma is the source of truth)
-            try? await healthKit.saveReading(
+            let measurementDate = Self.measurementDate(day: date, timeOfDay: timeOfDay)
+            try await healthKit.saveReading(
                 systolic: systolic,
                 diastolic: diastolic,
                 pulse: pulse,
-                date: date
+                date: measurementDate,
+                syncIdentifier: "com.soma.reading.\(UUID().uuidString)",
+                notes: notes?.trimmingCharacters(in: .whitespacesAndNewlines),
+                arm: arm
             )
-            _ = sessionId
             await load()
             return true
         } catch {
@@ -101,87 +98,127 @@ final class BPStore: ObservableObject {
         }
     }
 
-    // MARK: - Delete
-
     func deleteSession(_ session: BPSession) async {
-        let removed = sessions
+        let previousSessions = sessions
         sessions.removeAll { $0.sessionId == session.sessionId }
         do {
-            try await api.deleteSession(sessionId: session.sessionId)
-            rememberDeletedHealthKitKeys(Self.dedupeKeys(for: session))
+            try await healthKit.deleteBloodPressureSample(id: session.sessionId)
         } catch {
-            // Restore on failure
-            sessions = removed
+            sessions = previousSessions
             errorMessage = error.localizedDescription
         }
     }
 
-    // MARK: - HealthKit -> Soma sync
+    #if DEBUG
+    struct SeedReading: Codable {
+        let id: String
+        let date: String
+        let timeOfDay: TimeOfDay
+        let systolic: Int
+        let diastolic: Int
+        let pulse: Int?
+    }
 
-    /// Reads BP correlations from HealthKit and imports any that aren't in Soma yet.
-    /// Dedupe key: date + timeOfDay + systolic + diastolic (matches the importer's approach).
-    func syncFromHealthKit() async -> (imported: Int, skipped: Int) {
-        var imported = 0
-        var skipped = 0
-        do {
-            let samples = try await healthKit.fetchBloodPressureSamples(daysBack: 365)
-            var existingKeys = Set(sessions.flatMap(Self.dedupeKeys(for:)))
-            existingKeys.formUnion(deletedHealthKitKeys)
-            for sample in samples {
-                let key = Self.dedupeKey(
-                    date: sample.dateString,
-                    timeOfDay: sample.timeOfDay,
-                    sys: sample.systolic,
-                    dia: sample.diastolic
+    struct SeedData: Codable {
+        let version: Int
+        let source: String
+        let readings: [SeedReading]
+    }
+
+    /// Exports the canonical averaged Vercel sessions as a reusable JSON fixture.
+    func exportVercelSeedData() async throws -> URL {
+        let rows = try await api.fetchBloodPressureRows()
+        let sourceSessions = groupRowsIntoSessions(rows)
+        let seed = SeedData(
+            version: 1,
+            source: "Vercel averaged blood-pressure sessions",
+            readings: sourceSessions.map { session in
+                SeedReading(
+                    id: session.sessionId,
+                    date: session.date,
+                    timeOfDay: session.timeOfDay,
+                    systolic: session.systolic,
+                    diastolic: session.diastolic,
+                    pulse: session.pulse
                 )
-                if existingKeys.contains(key) {
-                    skipped += 1
-                    continue
-                }
-                _ = try await api.createSession(
-                    date: sample.dateString,
-                    timeOfDay: sample.timeOfDay,
-                    readings: [.init(systolic: sample.systolic, diastolic: sample.diastolic, pulse: sample.pulse, arm: nil)],
-                    notes: "Imported from Apple Health"
-                )
-                existingKeys.insert(key)
-                imported += 1
             }
-            if imported > 0 { await load() }
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-        return (imported, skipped)
-    }
-
-    static func dedupeKey(date: String, timeOfDay: TimeOfDay, sys: Int, dia: Int) -> String {
-        "\(date)|\(timeOfDay.rawValue)|\(sys)|\(dia)"
-    }
-
-    static func dedupeKeys(for session: BPSession) -> Set<String> {
-        guard !session.readings.isEmpty else {
-            return [dedupeKey(
-                date: session.date,
-                timeOfDay: session.timeOfDay,
-                sys: session.systolic,
-                dia: session.diastolic
-            )]
-        }
-        return Set(session.readings.map {
-            dedupeKey(date: $0.date, timeOfDay: $0.timeOfDay, sys: $0.systolic, dia: $0.diastolic)
-        })
-    }
-
-    private static let deletedHealthKitKeysDefaultsKey = "soma.deletedHealthKitReadingKeys"
-
-    private var deletedHealthKitKeys: Set<String> {
-        Set(defaults.stringArray(forKey: Self.deletedHealthKitKeysDefaultsKey) ?? [])
-    }
-
-    private func rememberDeletedHealthKitKeys(_ keys: Set<String>) {
-        defaults.set(
-            Array(deletedHealthKitKeys.union(keys)),
-            forKey: Self.deletedHealthKitKeysDefaultsKey
         )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        let data = try encoder.encode(seed)
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("BloodPressureSeed.json")
+        try data.write(to: url, options: .atomic)
+        return url
+    }
+
+    /// Rebuilds Soma-owned HealthKit data as one averaged record per Vercel session.
+    func repairHealthKitFromVercel() async throws -> (deleted: Int, imported: Int) {
+        let rows = try await api.fetchBloodPressureRows()
+        let sourceSessions = groupRowsIntoSessions(rows)
+
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = .current
+        formatter.dateFormat = "yyyy-MM-dd"
+
+        let exportableSessions = sourceSessions.compactMap { session -> (BPSession, Date)? in
+            guard let day = formatter.date(from: session.date) else { return nil }
+            return (session, Self.measurementDate(day: day, timeOfDay: session.timeOfDay))
+        }
+
+        let deleted = try await healthKit.deleteAllSomaHealthSamples()
+        for (session, date) in exportableSessions {
+            try await healthKit.saveReading(
+                systolic: session.systolic,
+                diastolic: session.diastolic,
+                pulse: session.pulse,
+                date: date,
+                syncIdentifier: "com.soma.session.\(session.sessionId)",
+                notes: nil,
+                arm: nil
+            )
+        }
+
+        await load()
+        return (deleted, exportableSessions.count)
+    }
+    #endif
+
+    private static func session(from sample: HealthSampleReading) -> BPSession {
+        let reading = BPReading(
+            id: sample.id,
+            date: sample.dateString,
+            timeOfDay: sample.timeOfDay,
+            systolic: sample.systolic,
+            diastolic: sample.diastolic,
+            pulse: sample.pulse,
+            notes: sample.notes,
+            arm: sample.arm
+        )
+        return BPSession(
+            sessionId: sample.id,
+            date: sample.dateString,
+            timeOfDay: sample.timeOfDay,
+            systolic: sample.systolic,
+            diastolic: sample.diastolic,
+            pulse: sample.pulse,
+            notes: sample.notes,
+            readings: [reading]
+        )
+    }
+
+    private static func measurementDate(day: Date, timeOfDay: TimeOfDay) -> Date {
+        let hour: Int
+        switch timeOfDay {
+        case .morning: hour = 8
+        case .afternoon: hour = 14
+        case .evening: hour = 20
+        }
+
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: day)
+        return calendar.date(byAdding: .hour, value: hour, to: startOfDay) ?? day
     }
 }

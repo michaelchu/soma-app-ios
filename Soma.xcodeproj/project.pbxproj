@@ -24,6 +24,7 @@
 		B878BB837B2A96BF10CCED94 /* BPModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677746DA7CA62CAA544A9A45 /* BPModels.swift */; };
 		C34373EBAC31AAD72AD49350 /* BPStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526D0F56B3E1A84BC99762CE /* BPStore.swift */; };
 		CD3710CA3A9FD7D45C24BD6C /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D29B2D8EAB46F1C9658800 /* HealthKitManager.swift */; };
+		D90688FB30733C6700648CF7 /* BloodPressureSeed.json in Resources */ = {isa = PBXBuildFile; fileRef = D90688FA30733C6700648CF7 /* BloodPressureSeed.json */; };
 		DE5E9EBD0F522F21A4B15C60 /* SomaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168D93B8CB518016DD0128F /* SomaTheme.swift */; };
 		EFDE8D9F37C1737731473D02 /* SomaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D242B681F357DEE968C2CF25 /* SomaApp.swift */; };
 		F8CCFDC9C24DB03FC672A60F /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB826E0AA431D5BDC0EEAB75 /* KeychainHelper.swift */; };
@@ -62,6 +63,7 @@
 		C8735705AF92B5E974BBF52D /* SomaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomaTests.swift; sourceTree = "<group>"; };
 		D0A62551F2855E7A6E80CDB7 /* LINESeedJP-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LINESeedJP-Bold.ttf"; sourceTree = "<group>"; };
 		D242B681F357DEE968C2CF25 /* SomaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomaApp.swift; sourceTree = "<group>"; };
+		D90688FA30733C6700648CF7 /* BloodPressureSeed.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BloodPressureSeed.json; sourceTree = "<group>"; };
 		EC24AB81584BB5A76737325C /* ReminderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderManager.swift; sourceTree = "<group>"; };
 		FB826E0AA431D5BDC0EEAB75 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +99,7 @@
 			children = (
 				0C299F368686D7C3AF7EE31B /* Assets.xcassets */,
 				7DB0A6B8C86122DEC6D06478 /* Fonts */,
+				D90688FA30733C6700648CF7 /* BloodPressureSeed.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D90688FB30733C6700648CF7 /* BloodPressureSeed.json in Resources */,
 				8BBC3E89585DFC1D07916F7B /* LINESeedJP-Bold.ttf in Resources */,
 				536DF9A71AC1DBAF6FD3D9B9 /* LINESeedJP-Regular.ttf in Resources */,
 				0561B6B779527A2FA058B6AB /* Assets.xcassets in Resources */,

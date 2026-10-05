@@ -8,7 +8,6 @@ struct ContentView: View {
     @StateObject private var filters = FilterState()
     @State private var showQuickLog = false
     @State private var showSettings = false
-    @State private var needsSetup = false
 
     var body: some View {
         TabView {
@@ -41,20 +40,11 @@ struct ContentView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
-        .fullScreenCover(isPresented: $needsSetup) {
-            NavigationStack {
-                SettingsView(isFirstRun: true, onDone: { needsSetup = false })
-            }
-        }
         .task {
-            needsSetup = !store.isConfigured
-            if store.isConfigured {
-                await store.load()
-            }
+            await store.load()
         }
-        .onChange(of: showSettings) { _, newValue in
-            // Returning from settings with fresh config -> load
-            if !newValue, store.isConfigured, store.sessions.isEmpty {
+        .onChange(of: showSettings) { _, isPresented in
+            if !isPresented {
                 Task { await store.load() }
             }
         }

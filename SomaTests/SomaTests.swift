@@ -48,18 +48,6 @@ final class BPSessionMathTests: XCTestCase {
 }
 
 final class SessionGroupingTests: XCTestCase {
-    @MainActor
-    func testDedupeKeysUseIndividualReadingsInsteadOfSessionAverage() {
-        let rows = [
-            makeRow(id: "r1", session: "s1", sys: 120, dia: 80),
-            makeRow(id: "r2", session: "s1", sys: 130, dia: 90),
-        ]
-        let session = groupRowsIntoSessions(rows)[0]
-
-        XCTAssertEqual(BPStore.dedupeKeys(for: session), ["2026-09-24|morning|120|80", "2026-09-24|morning|130|90"])
-        XCTAssertFalse(BPStore.dedupeKeys(for: session).contains("2026-09-24|morning|125|85"))
-    }
-
     func testGroupsRowsBySessionId() {
         let rows = [
             makeRow(id: "r1", session: "s1", sys: 120, dia: 80),
@@ -258,86 +246,87 @@ final class ReadingInputValidationTests: XCTestCase {
 
 @MainActor
 final class BPStoreTests: XCTestCase {
-    func testSyncDeduplicatesIdenticalSamplesWithinOneBatch() async {
-        let api = FakeAPIClient()
-        let health = FakeHealthKitManager(samples: [makeHealthSample(), makeHealthSample()])
-        let store = BPStore(api: api, healthKit: health, defaults: makeDefaults())
-
-        let result = await store.syncFromHealthKit()
-
-        XCTAssertEqual(result.imported, 1)
-        XCTAssertEqual(result.skipped, 1)
-        XCTAssertEqual(api.createdSessions.count, 1)
-    }
-
-    func testSyncTreatsDifferentTimesOfDayAsDistinct() async {
-        let api = FakeAPIClient()
+    func testLoadMapsHealthSamplesDirectlyToSessions() async {
         let health = FakeHealthKitManager(samples: [
-            makeHealthSample(timeOfDay: .morning),
-            makeHealthSample(timeOfDay: .evening),
+            makeHealthSample(id: "morning", timeOfDay: .morning),
+            makeHealthSample(id: "evening", timeOfDay: .evening)
         ])
-        let store = BPStore(api: api, healthKit: health, defaults: makeDefaults())
+        let store = BPStore(healthKit: health)
 
-        let result = await store.syncFromHealthKit()
+        await store.load()
 
-        XCTAssertEqual(result.imported, 2)
-        XCTAssertEqual(result.skipped, 0)
+        XCTAssertEqual(store.sessions.map(\.sessionId), ["morning", "evening"])
+        XCTAssertEqual(store.sessions.map(\.timeOfDay), [.morning, .evening])
+        XCTAssertNil(store.errorMessage)
     }
 
-    func testSuccessfulDeletePreventsHealthKitReimport() async {
-        let defaults = makeDefaults()
-        let api = FakeAPIClient(rows: [makeRow(id: "r1", session: "s1", sys: 120, dia: 80)])
-        let health = FakeHealthKitManager(samples: [makeHealthSample()])
-        let store = BPStore(api: api, healthKit: health, defaults: defaults)
+    func testDeleteRemovesHealthKitSample() async {
+        let health = FakeHealthKitManager(samples: [makeHealthSample(id: "sample-1")])
+        let store = BPStore(healthKit: health)
         await store.load()
 
         await store.deleteSession(store.sessions[0])
-        let result = await store.syncFromHealthKit()
 
-        XCTAssertEqual(result.imported, 0)
-        XCTAssertEqual(result.skipped, 1)
+        XCTAssertEqual(health.deletedIDs, ["sample-1"])
         XCTAssertTrue(store.sessions.isEmpty)
     }
 
-    func testFailedDeleteRestoresStateAndDoesNotCreateTombstone() async {
-        let defaults = makeDefaults()
-        let api = FakeAPIClient(rows: [makeRow(id: "r1", session: "s1", sys: 120, dia: 80)])
-        api.deleteError = TestFailure.expected
-        let store = BPStore(api: api, healthKit: FakeHealthKitManager(), defaults: defaults)
+    func testFailedDeleteRestoresState() async {
+        let health = FakeHealthKitManager(samples: [makeHealthSample(id: "sample-1")])
+        health.deleteError = TestFailure.expected
+        let store = BPStore(healthKit: health)
         await store.load()
 
         await store.deleteSession(store.sessions[0])
 
-        XCTAssertEqual(store.sessions.map(\.sessionId), ["s1"])
-
-        let importAPI = FakeAPIClient()
-        let importStore = BPStore(
-            api: importAPI,
-            healthKit: FakeHealthKitManager(samples: [makeHealthSample()]),
-            defaults: defaults
-        )
-        let result = await importStore.syncFromHealthKit()
-        XCTAssertEqual(result.imported, 1)
+        XCTAssertEqual(store.sessions.map(\.sessionId), ["sample-1"])
+        XCTAssertNotNil(store.errorMessage)
     }
 
     func testFailedRefreshPreservesPreviouslyLoadedSessionsAndClearsLoading() async {
-        let api = FakeAPIClient(rows: [makeRow(id: "r1", session: "s1", sys: 120, dia: 80)])
-        let store = BPStore(api: api, healthKit: FakeHealthKitManager(), defaults: makeDefaults())
+        let health = FakeHealthKitManager(samples: [makeHealthSample(id: "sample-1")])
+        let store = BPStore(healthKit: health)
         await store.load()
-        api.fetchError = TestFailure.expected
+        health.fetchError = TestFailure.expected
 
         await store.load()
 
-        XCTAssertEqual(store.sessions.map(\.sessionId), ["s1"])
+        XCTAssertEqual(store.sessions.map(\.sessionId), ["sample-1"])
         XCTAssertFalse(store.isLoading)
         XCTAssertNotNil(store.errorMessage)
     }
 
-    private func makeDefaults() -> UserDefaults {
-        let suiteName = "SomaTests.\(UUID().uuidString)"
-        let defaults = UserDefaults(suiteName: suiteName)!
-        defaults.removePersistentDomain(forName: suiteName)
-        return defaults
+    func testLoadPreservesHealthMetadata() async {
+        let health = FakeHealthKitManager(samples: [
+            makeHealthSample(notes: "After exercise", arm: .L)
+        ])
+        let store = BPStore(healthKit: health)
+
+        await store.load()
+
+        XCTAssertEqual(store.sessions[0].notes, "After exercise")
+        XCTAssertEqual(store.sessions[0].readings[0].notes, "After exercise")
+        XCTAssertEqual(store.sessions[0].readings[0].arm, .L)
+    }
+
+    func testAddSessionPassesNotesAndArmToHealthKit() async {
+        let health = FakeHealthKitManager()
+        let store = BPStore(healthKit: health)
+
+        let saved = await store.addSession(
+            date: Date(timeIntervalSince1970: 1_790_208_000),
+            timeOfDay: .morning,
+            systolic: 120,
+            diastolic: 80,
+            pulse: 70,
+            arm: .R,
+            notes: "  Before breakfast  "
+        )
+
+        XCTAssertTrue(saved)
+        XCTAssertEqual(health.savedReadings.count, 1)
+        XCTAssertEqual(health.savedReadings[0].notes, "Before breakfast")
+        XCTAssertEqual(health.savedReadings[0].arm, .R)
     }
 }
 
@@ -373,14 +362,22 @@ private func makeRow(id: String, session: String, sys: Int, dia: Int, pulse: Int
     )
 }
 
-private func makeHealthSample(timeOfDay: TimeOfDay = .morning) -> HealthSampleReading {
+private func makeHealthSample(
+    id: String = UUID().uuidString,
+    timeOfDay: TimeOfDay = .morning,
+    notes: String? = nil,
+    arm: Arm? = nil
+) -> HealthSampleReading {
     HealthSampleReading(
+        id: id,
         date: Date(timeIntervalSince1970: 1_790_208_000),
         dateString: "2026-09-24",
         timeOfDay: timeOfDay,
         systolic: 120,
         diastolic: 80,
-        pulse: 70
+        pulse: 70,
+        notes: notes,
+        arm: arm
     )
 }
 
@@ -422,20 +419,50 @@ private final class FakeAPIClient: SomaAPIClientProtocol {
 }
 
 private final class FakeHealthKitManager: HealthKitManagerProtocol {
+    struct SavedReading {
+        let notes: String?
+        let arm: Arm?
+    }
+
     var samples: [HealthSampleReading]
     var fetchError: Error?
     var saveError: Error?
+    var deleteError: Error?
+    private(set) var deletedIDs: [String] = []
+    private(set) var savedReadings: [SavedReading] = []
 
     init(samples: [HealthSampleReading] = []) {
         self.samples = samples
     }
 
-    func saveReading(systolic: Int, diastolic: Int, pulse: Int?, date: Date) async throws {
+    func saveReading(
+        systolic: Int,
+        diastolic: Int,
+        pulse: Int?,
+        date: Date,
+        syncIdentifier: String?,
+        notes: String?,
+        arm: Arm?
+    ) async throws {
         if let saveError { throw saveError }
+        savedReadings.append(SavedReading(notes: notes, arm: arm))
     }
 
     func fetchBloodPressureSamples(daysBack: Int) async throws -> [HealthSampleReading] {
         if let fetchError { throw fetchError }
         return samples
+    }
+
+    func deleteBloodPressureSample(id: String) async throws {
+        if let deleteError { throw deleteError }
+        deletedIDs.append(id)
+        samples.removeAll { $0.id == id }
+    }
+
+    func deleteAllSomaHealthSamples() async throws -> Int {
+        if let deleteError { throw deleteError }
+        let count = samples.count
+        samples.removeAll()
+        return count
     }
 }
