@@ -44,26 +44,10 @@ struct ChartsView: View {
                     if mode == .timeline {
                         TimelineChart(
                             sessions: filtered,
-                            showMAP: showMAP,
-                            showTrend: showTrend,
-                            showMarkers: showMarkers
+                            showMAP: $showMAP,
+                            showTrend: $showTrend,
+                            showMarkers: $showMarkers
                         )
-                        .overlay(alignment: .topTrailing) {
-                            HStack(spacing: 8) {
-                                Toggle("MAP", isOn: $showMAP)
-                                Toggle("Trend", isOn: $showTrend)
-                                Toggle("Markers", isOn: $showMarkers)
-                            }
-                            .toggleStyle(.button)
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
-                            .padding(4)
-                            .background(
-                                SomaTheme.card,
-                                in: RoundedRectangle(cornerRadius: 8)
-                            )
-                            .padding(8)
-                        }
                         .padding(.horizontal, 12)
                         .padding(.top, 12)
                     } else {
@@ -102,9 +86,9 @@ struct ChartsView: View {
 
 struct TimelineChart: View {
     let sessions: [BPSession]
-    let showMAP: Bool
-    let showTrend: Bool
-    let showMarkers: Bool
+    @Binding var showMAP: Bool
+    @Binding var showTrend: Bool
+    @Binding var showMarkers: Bool
 
     private struct Point: Identifiable {
         let id = UUID()
@@ -211,6 +195,19 @@ struct TimelineChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Spacer()
+                Menu {
+                    Toggle("MAP", isOn: $showMAP)
+                    Toggle("Trend", isOn: $showTrend)
+                    Toggle("Markers", isOn: $showMarkers)
+                } label: {
+                    Label("Chart Options", systemImage: "slider.horizontal.3")
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
+
             Chart {
                 ForEach(linePoints) { p in
                     LineMark(
