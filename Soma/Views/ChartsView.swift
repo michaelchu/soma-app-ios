@@ -35,48 +35,59 @@ struct ChartsView: View {
             VStack(spacing: 0) {
                 BPFilterBar(filters: filters)
 
-                Picker("Chart Type", selection: $mode) {
-                    ForEach(ChartMode.allCases) { chartMode in
-                        Text(chartMode.rawValue).tag(chartMode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .padding(.horizontal, 18)
-                .padding(.top, 8)
-
                 if filtered.isEmpty {
                     Spacer()
                     Text("No readings yet")
                         .foregroundColor(SomaTheme.muted)
                     Spacer()
-                } else if mode == .timeline {
-                    TimelineChart(
-                        sessions: filtered,
-                        showMAP: showMAP,
-                        showTrend: showTrend,
-                        showMarkers: showMarkers
-                    )
-                    .padding(.horizontal, 12)
-                    .padding(.top, 12)
-
-                    HStack(spacing: 8) {
-                        Toggle("MAP", isOn: $showMAP)
-                        Toggle("Trend", isOn: $showTrend)
-                        Toggle("Markers", isOn: $showMarkers)
-                    }
-                    .toggleStyle(.button)
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                    .padding(.top, 12)
-                    Spacer()
                 } else {
-                    DistributionChart(sessions: filtered)
+                    if mode == .timeline {
+                        TimelineChart(
+                            sessions: filtered,
+                            showMAP: showMAP,
+                            showTrend: showTrend,
+                            showMarkers: showMarkers
+                        )
+                        .overlay(alignment: .topTrailing) {
+                            HStack(spacing: 8) {
+                                Toggle("MAP", isOn: $showMAP)
+                                Toggle("Trend", isOn: $showTrend)
+                                Toggle("Markers", isOn: $showMarkers)
+                            }
+                            .toggleStyle(.button)
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                            .padding(4)
+                            .background(
+                                SomaTheme.card,
+                                in: RoundedRectangle(cornerRadius: 8)
+                            )
+                            .padding(8)
+                        }
                         .padding(.horizontal, 12)
                         .padding(.top, 12)
-                    Text("Each dot is one reading, coloured by category")
-                        .font(SomaFont.regular(12))
-                        .foregroundColor(SomaTheme.muted)
-                        .padding(.top, 8)
+                    } else {
+                        DistributionChart(sessions: filtered)
+                            .padding(.horizontal, 12)
+                            .padding(.top, 12)
+                    }
+
+                    Picker("Chart Type", selection: $mode) {
+                        ForEach(ChartMode.allCases) { chartMode in
+                            Text(chartMode.rawValue).tag(chartMode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal, 18)
+                    .padding(.top, 8)
+
+                    if mode == .scatter {
+                        Text("Each dot is one reading, coloured by category")
+                            .font(SomaFont.regular(12))
+                            .foregroundColor(SomaTheme.muted)
+                            .padding(.top, 8)
+                    }
+
                     Spacer()
                 }
             }
@@ -142,6 +153,20 @@ struct TimelineChart: View {
         return pts
     }
 
+    private var yDomain: ClosedRange<Double> {
+        let values = linePoints.map(\.value)
+        guard let minimum = values.min(), let maximum = values.max() else {
+            return 0...10
+        }
+
+        let interval = 10.0
+        let lowerBound = floor(minimum / interval) * interval
+        let upperBound = ceil(maximum / interval) * interval
+        return lowerBound == upperBound
+            ? lowerBound...(upperBound + interval)
+            : lowerBound...upperBound
+    }
+
     /// Least-squares trend lines spanning the currently filtered date range.
     private var trendPoints: [ChartPoint] {
         var result = trendPoints(for: points.map { Double($0.sys) }, series: "Systolic trend")
@@ -186,14 +211,6 @@ struct TimelineChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 16) {
-                legendDot(SomaTheme.systolic.opacity(showTrend ? 0.3 : 1), "Systolic")
-                legendDot(SomaTheme.diastolic.opacity(showTrend ? 0.3 : 1), "Diastolic")
-            }
-            .font(SomaFont.regular(12))
-            .foregroundColor(SomaTheme.muted)
-            .padding(.horizontal, 6)
-
             Chart {
                 ForEach(linePoints) { p in
                     LineMark(
@@ -222,6 +239,7 @@ struct TimelineChart: View {
                 "Diastolic trend": SomaTheme.diastolic,
                 "MAP trend": SomaTheme.slate,
             ])
+            .chartLegend(.hidden)
             .chartXAxis {
                 AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                     AxisGridLine().foregroundStyle(SomaTheme.border)
@@ -231,14 +249,27 @@ struct TimelineChart: View {
                 }
             }
             .chartYAxis {
-                AxisMarks(position: .leading) { _ in
+                AxisMarks(position: .leading, values: .stride(by: 10)) { _ in
                     AxisGridLine().foregroundStyle(SomaTheme.border)
                     AxisValueLabel()
                         .font(.system(size: 10))
                         .foregroundStyle(SomaTheme.muted)
                 }
             }
+            .chartYScale(domain: yDomain)
             .frame(height: 300)
+
+            HStack(spacing: 16) {
+                legendDot(SomaTheme.systolic.opacity(showTrend ? 0.3 : 1), "Systolic")
+                legendDot(SomaTheme.diastolic.opacity(showTrend ? 0.3 : 1), "Diastolic")
+                if showMAP {
+                    legendDot(SomaTheme.slate.opacity(showTrend ? 0.3 : 1), "MAP")
+                }
+            }
+            .font(SomaFont.regular(12))
+            .foregroundColor(SomaTheme.muted)
+            .padding(.horizontal, 6)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(12)
         .background(SomaTheme.card)
@@ -315,6 +346,7 @@ struct DistributionChart: View {
             .font(SomaFont.regular(12))
             .foregroundColor(SomaTheme.muted)
             .padding(.horizontal, 6)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(12)
         .background(SomaTheme.card)
