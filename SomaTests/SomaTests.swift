@@ -130,12 +130,12 @@ final class StatisticsTests: XCTestCase {
 }
 
 final class DateRangeTests: XCTestCase {
-    func testWeekStartsSixDaysAgo() {
+    func testHalfYearStartsSixMonthsAgo() {
         let cal = Calendar.current
         let now = Date()
-        let start = DateRange.week.startDate(now: now, calendar: cal)!
-        let days = cal.dateComponents([.day], from: cal.startOfDay(for: start), to: cal.startOfDay(for: now)).day!
-        XCTAssertEqual(days, 6)
+        let start = DateRange.halfYear.startDate(now: now, calendar: cal)!
+        let months = cal.dateComponents([.month], from: start, to: cal.startOfDay(for: now)).month!
+        XCTAssertEqual(months, 6)
     }
 
     func testAllHasNoStartOrPrevious() {
@@ -144,12 +144,11 @@ final class DateRangeTests: XCTestCase {
     }
 
     func testPreviousPeriodLength() {
-        // Previous week should be the 7 days before the current week
         let cal = Calendar.current
         let now = Date()
-        let period = DateRange.week.previousPeriod(now: now, calendar: cal)!
-        let days = cal.dateComponents([.day], from: period.start, to: period.end).day!
-        XCTAssertEqual(days, 7)
+        let period = DateRange.year.previousPeriod(now: now, calendar: cal)!
+        let years = cal.dateComponents([.year], from: period.start, to: period.end).year!
+        XCTAssertEqual(years, 1)
     }
 }
 

@@ -212,21 +212,23 @@ func calculateFullStats(sessions: [BPSession]) -> FullStats? {
 // MARK: - Date ranges (port of DateRangeTabs + dateUtils)
 
 enum DateRange: String, CaseIterable, Identifiable {
-    case week = "1w"
     case month = "1m"
     case quarter = "3m"
+    case halfYear = "6m"
+    case year = "1y"
     case all = "all"
     case custom = "custom"
 
-    static let presets: [DateRange] = [.week, .month, .quarter, .all]
+    static let presets: [DateRange] = [.month, .quarter, .halfYear, .year, .all]
 
     var id: String { rawValue }
 
     var label: String {
         switch self {
-        case .week: return "7D"
         case .month: return "1M"
         case .quarter: return "3M"
+        case .halfYear: return "6M"
+        case .year: return "1Y"
         case .all: return "All"
         case .custom: return "Custom"
         }
@@ -235,14 +237,17 @@ enum DateRange: String, CaseIterable, Identifiable {
     /// Start of the current period (matches calculatePeriodStart).
     func startDate(now: Date = Date(), calendar: Calendar = .current) -> Date? {
         switch self {
-        case .week:
-            let d = calendar.date(byAdding: .day, value: -6, to: now)!
-            return calendar.startOfDay(for: d)
         case .month:
             let d = calendar.date(byAdding: .month, value: -1, to: now)!
             return calendar.startOfDay(for: d)
         case .quarter:
             let d = calendar.date(byAdding: .month, value: -3, to: now)!
+            return calendar.startOfDay(for: d)
+        case .halfYear:
+            let d = calendar.date(byAdding: .month, value: -6, to: now)!
+            return calendar.startOfDay(for: d)
+        case .year:
+            let d = calendar.date(byAdding: .year, value: -1, to: now)!
             return calendar.startOfDay(for: d)
         case .all, .custom:
             return nil
@@ -254,9 +259,10 @@ enum DateRange: String, CaseIterable, Identifiable {
         guard let start = startDate(now: now, calendar: calendar) else { return nil }
         let (component, value): (Calendar.Component, Int) = {
             switch self {
-            case .week: return (.day, -7)
             case .month: return (.month, -1)
             case .quarter: return (.month, -3)
+            case .halfYear: return (.month, -6)
+            case .year: return (.year, -1)
             case .all, .custom: return (.day, 0)
             }
         }()
