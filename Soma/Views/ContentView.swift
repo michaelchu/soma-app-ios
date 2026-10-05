@@ -4,17 +4,11 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var store = BPStore.shared
-    @StateObject private var reminders = ReminderManager.shared
     @StateObject private var filters = FilterState()
     @State private var showQuickLog = false
-    @State private var showSettings = false
 
     var body: some View {
         TabView {
-            TodayView(showQuickLog: $showQuickLog, showSettings: $showSettings)
-                .tabItem {
-                    Label("Today", systemImage: "house")
-                }
             ReadingsView(showQuickLog: $showQuickLog)
                 .environmentObject(filters)
                 .tabItem {
@@ -30,6 +24,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("Charts", systemImage: "chart.line.uptrend.xyaxis")
                 }
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape")
+                }
         }
         .tint(SomaTheme.rose)
         .preferredColorScheme(.dark)
@@ -37,16 +35,8 @@ struct ContentView: View {
             QuickLogSheet()
                 .environmentObject(store)
         }
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
-        }
         .task {
             await store.load()
-        }
-        .onChange(of: showSettings) { _, isPresented in
-            if !isPresented {
-                Task { await store.load() }
-            }
         }
     }
 }

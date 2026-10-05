@@ -3,7 +3,6 @@ import SwiftUI
 // MARK: - Settings: Apple Health connection and reminder time
 
 struct SettingsView: View {
-    @Environment(\.dismiss) private var dismiss
     @ObservedObject var store = BPStore.shared
     @ObservedObject var reminders = ReminderManager.shared
 
@@ -13,9 +12,6 @@ struct SettingsView: View {
     @State private var healthStatus = "Not connected"
     @State private var isWorking = false
     @State private var message: String?
-    #if DEBUG
-    @State private var isRepairingHealthData = false
-    #endif
 
     var body: some View {
         NavigationStack {
@@ -41,67 +37,12 @@ struct SettingsView: View {
                             Task { await connectToHealth() }
                         }
                         .disabled(isWorking)
-                    } else {
-                        Button("Refresh from Apple Health") {
-                            Task {
-                                isWorking = true
-                                message = nil
-                                await store.load()
-                                message = store.errorMessage ?? "Loaded \(store.sessions.count) readings."
-                                isWorking = false
-                            }
-                        }
-                        .disabled(isWorking)
-
-                        Button("Manage Health permissions in Settings") {
-                            if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url)
-                            }
-                        }
-                        .foregroundColor(SomaTheme.muted)
                     }
 
-                    #if DEBUG
-                    Button("Export Vercel seed data") {
-                        Task {
-                            isRepairingHealthData = true
-                            message = nil
-                            do {
-                                let url = try await store.exportVercelSeedData()
-                                message = "Exported seed data to \(url.lastPathComponent)."
-                            } catch {
-                                message = "Seed export failed: \(error.localizedDescription)"
-                            }
-                            isRepairingHealthData = false
-                        }
-                    }
-                    .disabled(isWorking || isRepairingHealthData)
-
-                    Button("Repair Apple Health from Vercel", role: .destructive) {
-                        Task {
-                            isRepairingHealthData = true
-                            message = nil
-                            do {
-                                let result = try await store.repairHealthKitFromVercel()
-                                message = "Deleted \(result.deleted) Soma samples and imported \(result.imported) averaged sessions."
-                            } catch {
-                                message = "Repair failed: \(error.localizedDescription)"
-                            }
-                            isRepairingHealthData = false
-                        }
-                    }
-                    .disabled(isWorking || isRepairingHealthData)
-                    #endif
-
-                    #if DEBUG
-                    if isWorking || isRepairingHealthData {
-                        ProgressView().tint(SomaTheme.rose)
-                    }
-                    #else
                     if isWorking {
                         ProgressView().tint(SomaTheme.rose)
                     }
-                    #endif
+
                     if let message {
                         Text(message)
                             .font(SomaFont.regular(13))
@@ -130,13 +71,6 @@ struct SettingsView: View {
             .background(SomaTheme.background)
             .navigationTitle(isFirstRun ? "Connect Apple Health" : "Settings")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                if !isFirstRun {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Done") { dismiss() }
-                    }
-                }
-            }
             .onAppear {
                 switch HealthKitManager.shared.authorizationStatus() {
                 case .authorized:

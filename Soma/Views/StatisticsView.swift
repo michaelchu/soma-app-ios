@@ -181,7 +181,7 @@ struct StatsTable: View {
                 Text("Min").frame(width: 48)
                 Text("Max").frame(width: 48)
                 Text("Avg").frame(width: 48)
-                Text("vs Prev.").frame(minWidth: 64)
+                Text("Change").frame(minWidth: 64)
             }
             .font(SomaFont.regular(12))
             .foregroundColor(SomaTheme.muted)
@@ -233,26 +233,29 @@ struct ChangeBadge: View {
     let disabled: Bool
 
     var body: some View {
-        let type = disabled ? ChangeType.neutral : config.evaluate(current: current, previous: previous)
-        let diff = (current ?? 0) - (previous ?? 0)
-        HStack(spacing: 2) {
-            switch type {
-            case .improving:
-                Image(systemName: "arrow.down")
-                Text("\(absText(diff))")
-            case .worsening:
-                Image(systemName: "arrow.up")
-                Text("\(absText(diff))")
-            case .neutral:
-                Image(systemName: "minus")
-            }
-        }
+        let difference = roundedDifference
+        let type = changeType(for: difference)
+
+        Text(changeText(for: difference))
         .font(.system(size: 12, weight: .semibold))
         .foregroundColor(color(for: type))
     }
 
-    private func absText(_ diff: Double) -> String {
-        "\(Int(abs(diff).rounded()))"
+    private var roundedDifference: Int? {
+        guard !disabled, let current, let previous else { return nil }
+        return Int((current - previous).rounded())
+    }
+
+    private func changeType(for difference: Int?) -> ChangeType {
+        guard let difference, difference != 0 else { return .neutral }
+        return config.evaluate(current: current, previous: previous)
+    }
+
+    private func changeText(for difference: Int?) -> String {
+        guard let difference else { return "—" }
+        if difference > 0 { return "+\(difference)" }
+        if difference < 0 { return "−\(abs(difference))" }
+        return "0"
     }
 
     private func color(for type: ChangeType) -> Color {
